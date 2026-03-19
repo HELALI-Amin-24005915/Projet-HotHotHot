@@ -1,12 +1,54 @@
-<!doctype html>
-<html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>HotHotHot</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <h1>HotHotHot</h1>
-  </body>
+<html>
+<head>
+    <title>My Web Page</title>
+    <link rel="stylesheet" type="text/css" href="styless.css">
+</head>
+<body>
+
+<h1>Hello Everyday</h1>
+<p>CONSEIL : ne sois pas FAIBLE</p>
+
+<Temperature  id="Temperatures">
+    <h2>Tableau des temperature :</h2>
+
+    <div class="tabs">
+        <div role="tablist" aria-labelledby="tablist-1" class="manual ">
+            <button id="TempeDirect" type="button" role="tab" aria-selected="true" aria-controls="tabpanel-1">
+                <span class="focus">Direct</span>
+            </button>
+            <button id="Historique" type="button" role="tab" aria-selected="false" aria-controls="tabpanel-2" tabindex="-1">
+                <span class="focus">Historique</span>
+            </button>
+
+        </div>
+
+        <div id="tabpanel-1" role="tabpanel" aria-labelledby="TempeDirect-1">
+            <p id="message" role="alert"><aria-live="assertive" role="alert"></aria-live></p>
+            <p id="tempList" role="data"><aria-live="polite" role="data"></aria-live></p>
+        </div>
+        <div id="tabpanel-2" role="tabpanel" aria-labelledby="Historique-2" class="is-hidden">
+            <h3>Historique des températures</h3>
+            <table id="historyTable">
+                <thead>
+                <tr>
+                    <th>Heure</th>
+                    <th>Température</th>
+                </tr>
+                </thead>
+                <tbody id="historyList">
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    </div>
+
+
+</Temperature>
+
+<script src="JS/tabs.js"></script>
+<script src="JS/eventManager.js"></script>
+<script src="JS/temperatureDisplay.js"></script>
+<script src="JS/script.js"></script>
+</body>
 </html>
