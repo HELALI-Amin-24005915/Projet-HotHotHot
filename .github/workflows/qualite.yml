@@ -1,10 +1,9 @@
-name: Contrôle Qualité et Déploiement Doc
+name: Contrôle Qualité JS et Déploiement Doc
 
 on:
   push:
     branches: [ "main", "master" ]
 
-# Autorisations nécessaires pour déployer sur GitHub Pages
 permissions:
   contents: write
 
@@ -27,11 +26,9 @@ jobs:
       - name: Linter JavaScript (Nommage S_, I_, B_)
         run: npm run lint:js
 
-      # Génération de la documentation JSDoc
       - name: Génération de la JSDoc
         run: npm run doc
 
-      # Déploiement du dossier /docs sur la branche gh-pages
       - name: Déploiement sur GitHub Pages
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
         uses: peaceiris/actions-gh-pages@v3

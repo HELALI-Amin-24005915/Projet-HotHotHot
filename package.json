@@ -1,12 +1,21 @@
 {
   "name": "hothothot",
   "version": "1.0.0",
+  "description": "Projet SAE HotHotHot - Système de surveillance de températures",
+  "main": "js/script.js",
   "scripts": {
     "lint:js": "eslint .",
-    "hint:html": "htmlhint '**/*.html'",
     "audit:a11y": "pa11y index.html",
-    "doc": "jsdoc -c jsdoc.json"
+    "doc": "jsdoc -c jsdoc.json",
+    "prepare": "husky install"
   },
+  "keywords": [
+    "PWA",
+    "HotHotHot",
+    "SAE"
+  ],
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "eslint": "^10.0.3",
