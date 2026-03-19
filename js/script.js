@@ -1,9 +1,12 @@
-var O_EM = new EventManager();
+/* global EventManager, TemperatureDisplay */
+/* eslint-disable no-unused-vars */
 
-var O_TempDisplay = new TemperatureDisplay(O_EM);
+const O_EM = new EventManager();
 
-function updateTemperature() {
+const O_TempDisplay = new TemperatureDisplay(O_EM);
+
+const F_updateTemperature = function() {
   O_EM.updateState();
-}
+};
 
-const intervalID = setInterval(updateTemperature, (25 * 8 + 60 / 3) * 5 - 100);
+const I_intervalID = setInterval(F_updateTemperature, (25 * 8 + 60 / 3) * 5 - 100);

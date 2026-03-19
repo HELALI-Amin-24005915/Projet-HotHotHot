@@ -1,8 +1,9 @@
 "use strict";
+/* eslint-disable no-unused-vars */
 
 class TabsManual {
-  constructor(groupNode) {
-    this.tablistNode = groupNode;
+  constructor(O_groupNode) {
+    this.tablistNode = O_groupNode;
 
     this.tabs = [];
 
@@ -12,112 +13,112 @@ class TabsManual {
     this.tabs = Array.from(this.tablistNode.querySelectorAll("[role=tab]"));
     this.tabpanels = [];
 
-    for (var i = 0; i < this.tabs.length; i += 1) {
-      var tab = this.tabs[i];
-      var tabpanel = document.getElementById(tab.getAttribute("aria-controls"));
+    for (let I_i = 0; I_i < this.tabs.length; I_i += 1) {
+      const O_tab = this.tabs[I_i];
+      const O_tabpanel = document.getElementById(O_tab.getAttribute("aria-controls"));
 
-      tab.tabIndex = -1;
-      tab.setAttribute("aria-selected", "false");
-      this.tabpanels.push(tabpanel);
+      O_tab.tabIndex = -1;
+      O_tab.setAttribute("aria-selected", "false");
+      this.tabpanels.push(O_tabpanel);
 
-      tab.addEventListener("keydown", this.onKeydown.bind(this));
-      tab.addEventListener("click", this.onClick.bind(this));
+      O_tab.addEventListener("keydown", this.onKeydown.bind(this));
+      O_tab.addEventListener("click", this.onClick.bind(this));
 
       if (!this.firstTab) {
-        this.firstTab = tab;
+        this.firstTab = O_tab;
       }
-      this.lastTab = tab;
+      this.lastTab = O_tab;
     }
 
     this.setSelectedTab(this.firstTab);
   }
 
-  setSelectedTab(currentTab) {
-    for (var i = 0; i < this.tabs.length; i += 1) {
-      var tab = this.tabs[i];
-      if (currentTab === tab) {
-        tab.setAttribute("aria-selected", "true");
-        tab.removeAttribute("tabindex");
-        this.tabpanels[i].classList.remove("is-hidden");
+  setSelectedTab(O_currentTab) {
+    for (let I_i = 0; I_i < this.tabs.length; I_i += 1) {
+      const O_tab = this.tabs[I_i];
+      if (O_currentTab === O_tab) {
+        O_tab.setAttribute("aria-selected", "true");
+        O_tab.removeAttribute("tabindex");
+        this.tabpanels[I_i].classList.remove("is-hidden");
       } else {
-        tab.setAttribute("aria-selected", "false");
-        tab.tabIndex = -1;
-        this.tabpanels[i].classList.add("is-hidden");
+        O_tab.setAttribute("aria-selected", "false");
+        O_tab.tabIndex = -1;
+        this.tabpanels[I_i].classList.add("is-hidden");
       }
     }
   }
 
-  moveFocusToTab(currentTab) {
-    currentTab.focus();
+  moveFocusToTab(O_currentTab) {
+    O_currentTab.focus();
   }
 
-  moveFocusToPreviousTab(currentTab) {
-    var index;
+  moveFocusToPreviousTab(O_currentTab) {
+    let I_index;
 
-    if (currentTab === this.firstTab) {
+    if (O_currentTab === this.firstTab) {
       this.moveFocusToTab(this.lastTab);
     } else {
-      index = this.tabs.indexOf(currentTab);
-      this.moveFocusToTab(this.tabs[index - 1]);
+      I_index = this.tabs.indexOf(O_currentTab);
+      this.moveFocusToTab(this.tabs[I_index - 1]);
     }
   }
 
-  moveFocusToNextTab(currentTab) {
-    var index;
+  moveFocusToNextTab(O_currentTab) {
+    let I_index;
 
-    if (currentTab === this.lastTab) {
+    if (O_currentTab === this.lastTab) {
       this.moveFocusToTab(this.firstTab);
     } else {
-      index = this.tabs.indexOf(currentTab);
-      this.moveFocusToTab(this.tabs[index + 1]);
+      I_index = this.tabs.indexOf(O_currentTab);
+      this.moveFocusToTab(this.tabs[I_index + 1]);
     }
   }
 
   /* EVENT HANDLERS */
 
-  onKeydown(event) {
-    var tgt = event.currentTarget,
-      flag = false;
+  onKeydown(O_event) {
+    const O_tgt = O_event.currentTarget;
+    let B_flag = false;
 
-    switch (event.key) {
+    switch (O_event.key) {
       case "ArrowLeft":
-        this.moveFocusToPreviousTab(tgt);
-        flag = true;
+        this.moveFocusToPreviousTab(O_tgt);
+        B_flag = true;
         break;
 
       case "ArrowRight":
-        this.moveFocusToNextTab(tgt);
-        flag = true;
+        this.moveFocusToNextTab(O_tgt);
+        B_flag = true;
         break;
 
       case "Home":
         this.moveFocusToTab(this.firstTab);
-        flag = true;
+        B_flag = true;
         break;
 
       case "End":
         this.moveFocusToTab(this.lastTab);
-        flag = true;
+        B_flag = true;
         break;
 
       default:
         break;
     }
 
-    if (flag) {
-      event.stopPropagation();
-      event.preventDefault();
+    if (B_flag) {
+      O_event.stopPropagation();
+      O_event.preventDefault();
     }
   }
 
-  onClick(event) {
-    this.setSelectedTab(event.currentTarget);
+  onClick(O_event) {
+    this.setSelectedTab(O_event.currentTarget);
   }
 }
 
 window.addEventListener("load", function () {
-  var tablists = document.querySelectorAll("[role=tablist].manual");
-  for (var i = 0; i < tablists.length; i++) {
-    new TabsManual(tablists[i]);
+  const A_tablists = document.querySelectorAll("[role=tablist].manual");
+  for (let I_i = 0; I_i < A_tablists.length; I_i++) {
+    new TabsManual(A_tablists[I_i]);
   }
 });

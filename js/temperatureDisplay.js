@@ -1,6 +1,8 @@
+/* eslint-disable no-unused-vars */
+
 class TemperatureDisplay {
-  constructor(eventManager) {
-    this.eventManager = eventManager;
+  constructor(O_eventManager) {
+    this.eventManager = O_eventManager;
     this.O_AfficheTemp = document.getElementById("tempList");
     this.O_HistoryTableBody = document.getElementById("historyList");
     this.O_AfficheMesage = document.getElementById("message");
@@ -8,41 +10,42 @@ class TemperatureDisplay {
     this.eventManager.subscribe(this.update.bind(this));
   }
 
-  update(state) {
-    this.displayCurrentTemperature(state);
+  update(O_state) {
+    this.displayCurrentTemperature(O_state);
     this.updateHistoryTable();
   }
 
-  displayCurrentTemperature(state) {
-    this.O_AfficheTemp.textContent = state.currentTemperature + " °C";
-    this.O_AfficheTemp.className = state.category;
-    this.O_AfficheMesage.textContent = state.message;
+  displayCurrentTemperature(O_state) {
+    this.O_AfficheTemp.textContent = O_state.currentTemperature + " °C";
+    this.O_AfficheTemp.className = O_state.category;
+    this.O_AfficheMesage.textContent = O_state.message;
   }
 
   updateHistoryTable() {
-    var A_History = this.eventManager.getHistory();
+    const A_History = this.eventManager.getHistory();
 
     this.O_HistoryTableBody.innerHTML = "";
 
-    A_History.forEach((entry) => {
-      var row = this.O_HistoryTableBody.insertRow();
-      var cellTime = row.insertCell(0);
-      var cellTemp = row.insertCell(1);
+    A_History.forEach((O_entry) => {
+      const O_row = this.O_HistoryTableBody.insertRow();
+      const O_cellTime = O_row.insertCell(0);
+      const O_cellTemp = O_row.insertCell(1);
 
-      cellTime.textContent = entry.time;
-      cellTemp.textContent = entry.temperature + " °C";
+      O_cellTime.textContent = O_entry.time;
+      O_cellTemp.textContent = O_entry.temperature + " °C";
 
-      if (entry.temperature < 0) {
-        row.className = "bleue";
-      } else if (entry.temperature >= 0 && entry.temperature <= 20) {
-        row.className = "vert";
-      } else if (entry.temperature > 20 && entry.temperature <= 30) {
-        row.className = "orange";
+      if (O_entry.temperature < 0) {
+        O_row.className = "bleue";
+      } else if (O_entry.temperature >= 0 && O_entry.temperature <= 20) {
+        O_row.className = "vert";
+      } else if (O_entry.temperature > 20 && O_entry.temperature <= 30) {
+        O_row.className = "orange";
       } else {
-        row.className = "rouge";
+        O_row.className = "rouge";
       }
     });
   }
+  
   unsubscribe() {
     this.eventManager.unsubscribe(this.update.bind(this));
   }

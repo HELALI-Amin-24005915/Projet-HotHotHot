@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 class HistoryManager {
   constructor(O_eventManager) {
     this.O_eventManager = O_eventManager;
@@ -13,7 +15,7 @@ class HistoryManager {
     this.O_eventManager.subscribe(this.update.bind(this));
   }
 
-  addRowToTable(I_temperature, I_index) {
+  addRowToTable(I_temperature) {
     const O_row = document.createElement("tr");
 
     const O_cellTemperature = document.createElement("td");
@@ -31,8 +33,6 @@ class HistoryManager {
 
   update(O_data) {
     const I_temperature = O_data.temperature;
-    const I_index = O_data.index;
-
-    this.addRowToTable(I_temperature, I_index);
+    this.addRowToTable(I_temperature);
   }
 }

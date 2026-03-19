@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-vars */
+
 class EventManager {
   constructor() {
     this.A_tempe = [];
     this.A_HistoireTemperatures = [];
-    var I_t;
+    let I_t;
     this.A_subscribers = [];
     this.state = {
       currentIndex: 0,
@@ -11,24 +13,24 @@ class EventManager {
       message: "",
     };
 
-    for (var I_i = 0; I_i < 20; I_i++) {
+    for (let I_i = 0; I_i < 20; I_i++) {
       I_t = Math.random() * (40 - -10) + -10; // car Math.random() génère entre 0 et 1 donc pour avoir entre -10 et 40
       I_t = Math.round(I_t);
       this.A_tempe.push(I_t);
     }
   }
 
-  subscribe(O_callback) {
-    this.A_subscribers.push(O_callback);
+  subscribe(F_callback) {
+    this.A_subscribers.push(F_callback);
   }
 
   notify(O_data) {
-    this.A_subscribers.forEach((O_callback) => O_callback(O_data));
+    this.A_subscribers.forEach((F_callback) => F_callback(O_data));
   }
 
-  unsubscribe(O_callback) {
+  unsubscribe(F_callback) {
     this.A_subscribers = this.A_subscribers.filter(
-      (O_sub) => O_sub !== O_callback,
+      (F_sub) => F_sub !== F_callback,
     );
   }
 
@@ -37,16 +39,17 @@ class EventManager {
   }
 
   addToHistory(I_temperature) {
-    const now = new Date();
-    const time =
-      now.getHours().toString().padStart(2, "0") +
+    const O_now = new Date();
+    const S_time =
+      O_now.getHours().toString().padStart(2, "0") +
       ":" +
-      now.getMinutes().toString().padStart(2, "0") +
+      O_now.getMinutes().toString().padStart(2, "0") +
       ":" +
-      now.getSeconds().toString().padStart(2, "0");
+      O_now.getSeconds().toString().padStart(2, "0");
+      
     this.A_HistoireTemperatures.push({
       temperature: I_temperature,
-      time: time,
+      time: S_time,
     });
   }
 
