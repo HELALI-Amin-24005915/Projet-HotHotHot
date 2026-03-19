@@ -3,3 +3,4 @@ localhost.key
 .vscode
 .idea
 .env
+.pem
