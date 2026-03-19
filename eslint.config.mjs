@@ -1,3 +1,4 @@
+/* eslint-disable id-match */
 import js from "@eslint/js";
 import globals from "globals";
 

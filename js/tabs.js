@@ -1,6 +1,4 @@
 "use strict";
-/* eslint-disable no-unused-vars */
-
 class TabsManual {
   constructor(O_groupNode) {
     this.tablistNode = O_groupNode;
