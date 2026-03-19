@@ -2,7 +2,7 @@ name: Contrôle Qualité JS et Déploiement Doc
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [ "**" ]
 
 permissions:
   contents: write
