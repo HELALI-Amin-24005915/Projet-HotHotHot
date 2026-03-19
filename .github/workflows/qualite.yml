@@ -1,0 +1,40 @@
+name: Contrôle Qualité et Déploiement Doc
+
+on:
+  push:
+    branches: [ "main", "master" ]
+
+# Autorisations nécessaires pour déployer sur GitHub Pages
+permissions:
+  contents: write
+
+jobs:
+  analyse_et_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonage du dépôt
+        uses: actions/checkout@v4
+
+      - name: Installation de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Installation des dépendances
+        run: npm install
+
+      - name: Linter JavaScript (Nommage S_, I_, B_)
+        run: npm run lint:js
+
+      # Génération de la documentation JSDoc
+      - name: Génération de la JSDoc
+        run: npm run doc
+
+      # Déploiement du dossier /docs sur la branche gh-pages
+      - name: Déploiement sur GitHub Pages
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs

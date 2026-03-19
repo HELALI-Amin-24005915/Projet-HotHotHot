@@ -1,0 +1,23 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": "eslint:recommended",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-unused-vars": "warn",
+    "prefer-const": "error",
+    "id-match": [
+      "error",
+      "^(?:[S]_.*|[I]_.*|[B]_.*|[F]_.*|[O]_.*|[A]_.*)$",
+      {
+        "properties": false,
+        "onlyDeclarations": true
+      }
+    ]
+  }
+}

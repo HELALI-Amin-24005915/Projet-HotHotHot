@@ -3,4 +3,9 @@ localhost.key
 .vscode
 .idea
 .env
-.pem
+node_modules/
+localhost+2.pem
+localhost+2-key.pem
+node_modules/
+dist/
+.DS_Store

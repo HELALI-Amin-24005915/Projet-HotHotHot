@@ -1,0 +1,17 @@
+{
+  "name": "hothothot",
+  "version": "1.0.0",
+  "scripts": {
+    "lint:js": "eslint .",
+    "hint:html": "htmlhint '**/*.html'",
+    "audit:a11y": "pa11y index.html",
+    "doc": "jsdoc -c jsdoc.json"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "htmlhint": "^1.1.4",
+    "husky": "^8.0.3",
+    "jsdoc": "^4.0.5",
+    "pa11y": "^8.0.0"
+  }
+}
