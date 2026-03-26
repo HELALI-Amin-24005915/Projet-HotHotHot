@@ -4,6 +4,7 @@ localhost.key
 .idea
 .env
 node_modules/
+*.pem
 localhost+2.pem
 localhost+2-key.pem
 node_modules/
