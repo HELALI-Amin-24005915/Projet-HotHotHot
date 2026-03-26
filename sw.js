@@ -9,14 +9,15 @@ const A_URLS_TO_CACHE = [
     '/js/tabs.js',
     '/js/eventManager.js',
     '/js/temperatureDisplay.js',
-    '/manifest.json'
+    '/manifest.json',
+    '/README_NEW.md'
 ];
 
 // open cache and add all files to it
 self.addEventListener('install', function F_onInstall(O_event) {
     O_event.waitUntil(
-        caches.opens(S_CACHE_NAME)
-            .then(function(O_cache) {
+        caches.open(S_CACHE_NAME)
+            .then(function F_cacheUrls(O_cache) {
                 console.log('Cache ouvert');
                 return O_cache.addAll(A_URLS_TO_CACHE);
             })

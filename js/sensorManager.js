@@ -99,6 +99,8 @@ class SensorManager {
    * Gère les erreurs WebSocket
    */
   handleWebSocketError() {
+    this.F_loadOfflineData();
+
     if (this.B_isUsingAjax === true || this.B_isWebSocketFailureHandled === true) {
       return;
     }
@@ -183,11 +185,10 @@ class SensorManager {
       });
   }
 
-  /**
-   * Traite les données reçues (supporte plusieurs formats)
-   */
+
   processData(O_data) {
-    // Format HotHotHot API: {"capteurs":[{"Nom":"interieur","Valeur":"16.4"},{"Nom":"exterieur","Valeur":"9.5"}]}
+    this.F_saveDataOffline(O_data);
+
     if (O_data.capteurs && Array.isArray(O_data.capteurs)) {
       for (let I_i = 0; I_i < O_data.capteurs.length; I_i++) {
         const O_capteur = O_data.capteurs[I_i];
@@ -244,4 +245,35 @@ class SensorManager {
       O_indicator.innerHTML = `Mode: <strong>${S_text}</strong>`;
     }
   }
+
+  /**
+   * Sauvegarde les données dans le navigateur (Exigence Lot 3)
+   * @param {Object} O_data - Les données à sauvegarder
+   * @return {void}
+   */
+  F_saveDataOffline(O_data) {
+    const S_jsonData = JSON.stringify(O_data);
+    window.localStorage.setItem('S_lastTempData', S_jsonData);
+  }
+
+  /**
+   * Récupère les données de secours si on est hors ligne
+   * @return {void}
+   */
+  F_loadOfflineData() {
+    if (navigator.onLine === false) {
+      console.log("Mode hors ligne détecté. Lecture du localStorage...");
+      const S_savedData = window.localStorage.getItem('S_lastTempData');
+      
+      if (S_savedData !== null) {
+        const O_data = JSON.parse(S_savedData);
+        console.log("Données de secours trouvées :", O_data);
+        this.processData(O_data);
+      } else {
+        console.warn("Aucune donnée de secours disponible.");
+      }
+    }
+  }
+
+
 }

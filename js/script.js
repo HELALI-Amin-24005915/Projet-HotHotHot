@@ -5,7 +5,7 @@ const O_EM = new EventManager();
 
 const O_temperatureDisplay = new TemperatureDisplay(O_EM);
 
-const O_sensorManager = new SensorManager();
+const O_sensorManager = new SensorManager(O_EM);
 O_sensorManager.F_startSimulation();
 
 function F_registerServiceWorker() {
