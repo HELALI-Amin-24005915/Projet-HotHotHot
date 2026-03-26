@@ -9,7 +9,6 @@ class EventManager {
   constructor() {
     this.A_tempe = [];
     this.A_HistoireTemperatures = [];
-    let I_temperatureValue;
     this.A_subscribers = [];
     this.O_state = {
       I_currentIndex: 0,
@@ -17,12 +16,7 @@ class EventManager {
       S_category: null,
       S_message: "",
     };
-
-    for (let I_i = 0; I_i < 20; I_i++) {
-      I_temperatureValue = Math.random() * (40 - -10) + -10;
-      I_temperatureValue = Math.round(I_temperatureValue);
-      this.A_tempe.push(I_temperatureValue);
-    }
+    // Tableau vide - les données viendront du WebSocket/AJAX
   }
 
   /**
@@ -84,7 +78,7 @@ class EventManager {
       O_now.getMinutes().toString().padStart(2, "0") +
       ":" +
       O_now.getSeconds().toString().padStart(2, "0");
-      
+
     this.A_HistoireTemperatures.push({
       I_temperature: I_temperature,
       S_time: S_time,
@@ -101,22 +95,23 @@ class EventManager {
   }
 
   /**
-   * Met à jour l'état courant, calcule la catégorie et notifie les abonnés.
-   * @param {void} V_noParam - Aucun paramètre attendu pour F_updateState.
+   * Met à jour l'état courant avec une température donnée.
+   * @param {number} temperature - Température à utiliser
    * @return {void} Ne retourne aucune valeur.
    */
-  F_updateState() {
-    this.O_state.I_currentIndex++;
-    if (this.O_state.I_currentIndex >= this.A_tempe.length) {
-      this.O_state.I_currentIndex = 0;
+  F_updateState(temperature) {
+    // Si pas de température passée en paramètre, ignorer
+    if (temperature === undefined) {
+      return;
     }
 
-    this.O_state.I_currentTemperature = this.A_tempe[this.O_state.I_currentIndex];
+    this.O_state.I_currentTemperature = temperature;
     this.F_addToHistory(this.O_state.I_currentTemperature);
 
     if (this.O_state.I_currentTemperature < 0) {
       this.O_state.S_category = "bleue";
-      this.O_state.S_message = "Brrrrrrr, un peu froid ce matin, mets ta cagoule !";
+      this.O_state.S_message =
+        "Brrrrrrr, un peu froid ce matin, mets ta cagoule !";
     } else if (
       this.O_state.I_currentTemperature >= 0 &&
       this.O_state.I_currentTemperature <= 20
