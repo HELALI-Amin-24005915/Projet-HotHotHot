@@ -9,6 +9,8 @@ const A_URLS_TO_CACHE = [
     '/js/tabs.js',
     '/js/eventManager.js',
     '/js/temperatureDisplay.js',
+    '/js/sensorManager.js',   
+    '/js/historyManager.js', 
     '/manifest.json',
     '/README_NEW.md'
 ];
