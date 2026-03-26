@@ -15,3 +15,19 @@ const F_updateTemperature = function() {
 };
 
 const I_intervalID = setInterval(F_updateTemperature, (25 * 8 + 60 / 3) * 5 - 100);
+
+function F_registerServiceWorker() {
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function F_loadSW() {
+      this.navigator.serviceWorker.register('/sw.js')
+      .then(function F_onSuccess(O_registration) {
+        console.log('Le ServiceWorker est enregistré: ', O_registration.scope);
+      })
+      .catch(function F_onError(O_error) {
+        console.log('L\'enregistrement du ServiceWorker a échoué: ', O_error);
+      });
+    });
+  }
+}
+
+F_registerServiceWorker();
