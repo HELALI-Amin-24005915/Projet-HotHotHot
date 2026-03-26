@@ -9,7 +9,7 @@
 <h1>Hello Everyday</h1>
 <p>CONSEIL : ne sois pas FAIBLE</p>
 
-<div id="connection-mode" style="padding: 10px; margin: 10px 0; background: #f0f0f0; border-radius: 5px; font-size: 14px; font-weight: bold;">
+<div id="connection-mode" style="padding: 10px; margin: 10px 0; background: #f0f0f0; border-radius: 5px; font-size: 12px;">
   Mode: <strong>Initialisation...</strong>
 </div>
     <h2>Tableau des temperature :</h2>
@@ -26,21 +26,43 @@
         </div>
 
         <div id="tabpanel-1" role="tabpanel" aria-labelledby="TempeDirect-1">
+            <h3>Temperature Intérieure</h3>
             <p id="message" role="alert"><aria-live="assertive" role="alert"></aria-live></p>
             <p id="tempList" role="data"><aria-live="polite" role="data"></aria-live></p>
+
+            <h3>Temperature Extérieure</h3>
+            <p id="tempExtList" role="data"><aria-live="polite" role="data"></aria-live></p>
         </div>
         <div id="tabpanel-2" role="tabpanel" aria-labelledby="Historique-2" class="is-hidden">
-            <h3>Historique des températures</h3>
-            <table id="historyTable">
-                <thead>
-                <tr>
-                    <th>Heure</th>
-                    <th>Température</th>
-                </tr>
-                </thead>
-                <tbody id="historyList">
-                </tbody>
-            </table>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 300px;">
+                    <h3>Historique - Temperature Intérieure</h3>
+                    <table id="historyTable">
+                        <thead>
+                        <tr>
+                            <th>Heure</th>
+                            <th>Température</th>
+                        </tr>
+                        </thead>
+                        <tbody id="historyList">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="flex: 1; min-width: 300px;">
+                    <h3>Historique - Temperature Extérieure</h3>
+                    <table id="historyTableExt">
+                        <thead>
+                        <tr>
+                            <th>Heure</th>
+                            <th>Température</th>
+                        </tr>
+                        </thead>
+                        <tbody id="historyListExt">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
     </div>

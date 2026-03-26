@@ -35,14 +35,14 @@ class SensorManager {
           this.ws &&
           this.ws.readyState === WebSocket.CONNECTING
         ) {
-          console.warn("⏱️ WebSocket timeout (3s) - pas de réponse");
+          console.warn("WebSocket timeout");
           this.ws.close();
         }
       }, 3000);
 
       this.ws.onopen = () => {
         clearTimeout(this.wsTimeout);
-        console.log("✅ WebSocket connecté");
+        console.log("WebSocket connected");
         this.isConnected = true;
         this.isUsingWebSocket = true;
         this.isUsingAjax = false;
@@ -57,13 +57,13 @@ class SensorManager {
       };
 
       this.ws.onerror = (error) => {
-        console.warn("❌ WebSocket indisponible");
+        console.warn("WebSocket error");
         this.handleWebSocketError();
       };
 
       this.ws.onclose = () => {
         clearTimeout(this.wsTimeout);
-        console.log("⚠️ WebSocket fermé");
+        console.log("WebSocket closed");
         this.isConnected = false;
         this.attemptReconnect();
       };
@@ -80,7 +80,7 @@ class SensorManager {
     if (this.reconnectAttempts < this.maxReconnectAttempts) {
       this.attemptReconnect();
     } else {
-      console.log("📡 Basculement vers AJAX...");
+      console.log("Basculement vers AJAX...");
       this.isUsingWebSocket = false;
       this.isUsingAjax = true;
       this.connectionMode = "AJAX";
@@ -96,9 +96,6 @@ class SensorManager {
   attemptReconnect() {
     this.reconnectAttempts++;
     const delay = this.reconnectDelay * this.reconnectAttempts;
-    console.log(
-      `🔄 Tentative de reconnexion ${this.reconnectAttempts}/${this.maxReconnectAttempts} dans ${delay}ms`,
-    );
 
     setTimeout(() => {
       this.connectWebSocket();
@@ -115,51 +112,36 @@ class SensorManager {
     const reqXhr = new XMLHttpRequest();
     reqXhr.open("GET", url, true);
     reqXhr.setRequestHeader("Content-Type", "application/json");
-    reqXhr.timeout = 5000; // Timeout 5 secondes
-
-    console.log(`🌐 Tentative AJAX vers: ${url}`);
+    reqXhr.timeout = 5000;
 
     reqXhr.onreadystatechange = () => {
       if (reqXhr.readyState === XMLHttpRequest.DONE) {
         if (reqXhr.status === 200) {
           try {
             const data = JSON.parse(reqXhr.responseText);
-            console.log("✅ Données reçues via AJAX:", data);
-            this.ajaxAttempts = 0; // Réinitialiser le compteur
+            this.ajaxAttempts = 0;
             this.processData(data);
-            // Renouveler la requête toutes les 5 secondes
             setTimeout(() => this.fetchDataAjax(), 5000);
           } catch (error) {
-            console.error("❌ Erreur parsing JSON:", error);
+            console.error("JSON parse error");
             setTimeout(() => this.fetchDataAjax(), 5000);
           }
         } else {
-          console.log(`⚠️ Status AJAX: ${reqXhr.status}`);
-          // Renouveler en cas d'erreur
           setTimeout(() => this.fetchDataAjax(), 5000);
         }
       }
     };
 
     reqXhr.ontimeout = () => {
-      console.warn("⏱️ Timeout AJAX (5s)");
       setTimeout(() => this.fetchDataAjax(), 5000);
     };
 
     reqXhr.onerror = () => {
-      console.warn(`⚠️ Erreur AJAX: ${url}`);
       this.ajaxAttempts++;
-
       if (this.ajaxAttempts < 5) {
-        console.warn(
-          `⏳ Nouvelle tentative dans 5 secondes... (${this.ajaxAttempts}/5)`,
-        );
         setTimeout(() => this.fetchDataAjax(), 5000);
       } else {
-        console.error("❌ AJAX échoué après 5 tentatives");
-        console.log(
-          "💡 Vérifiez que l'API est accessible: https://api.hothothot.dog/api/sensors",
-        );
+        console.error("AJAX failed after 5 attempts");
       }
     };
 
@@ -170,22 +152,16 @@ class SensorManager {
    * Traite les données reçues (supporte plusieurs formats)
    */
   processData(data) {
-    console.log("Traitement des données:", data);
-
     // Format HotHotHot API: {"capteurs":[{"Nom":"interieur","Valeur":"16.4"},{"Nom":"exterieur","Valeur":"9.5"}]}
     if (data.capteurs && Array.isArray(data.capteurs)) {
       for (const capteur of data.capteurs) {
         const nom = capteur.Nom.toLowerCase();
         const valeur = parseFloat(capteur.Valeur);
 
-        // Afficher la température intérieure par défaut
         if (nom.includes("interieur") || nom.includes("int")) {
-          console.log(`Capteur intérieur: ${valeur}°C`);
-          console.log("Appel F_updateState avec:", valeur);
           this.eventManager.F_updateState(valeur);
         } else if (nom.includes("exterieur") || nom.includes("ext")) {
-          console.log(`Capteur extérieur: ${valeur}°C`);
-          // On peut aussi traiter l'extérieur si besoin
+          this.eventManager.F_updateStateExt(valeur);
         }
       }
       return;
@@ -207,7 +183,6 @@ class SensorManager {
     }
 
     if (temperature !== null) {
-      console.log("📤 Appel F_updateState avec:", temperature);
       this.eventManager.F_updateState(temperature);
     }
   }

@@ -9,14 +9,18 @@ class EventManager {
   constructor() {
     this.A_tempe = [];
     this.A_HistoireTemperatures = [];
+    this.A_HistoireTemperaturesExt = [];
     this.A_subscribers = [];
     this.O_state = {
       I_currentIndex: 0,
       I_currentTemperature: null,
+      I_currentTemperatureExt: null,
       S_category: null,
+      S_categoryExt: null,
       S_message: "",
+      S_messageExt: "",
     };
-    // Tableau vide - les données viendront du WebSocket/AJAX
+    // Données venant du WebSocket/AJAX
   }
 
   /**
@@ -86,12 +90,41 @@ class EventManager {
   }
 
   /**
+   * Ajoute une température extérieure à l'historique avec son horodatage.
+   * @param {number} I_temperature - Valeur I_temperature à historiser.
+   * @return {void} Ne retourne aucune valeur.
+   */
+  F_addToHistoryExt(I_temperature) {
+    const O_now = new Date();
+    const S_time =
+      O_now.getHours().toString().padStart(2, "0") +
+      ":" +
+      O_now.getMinutes().toString().padStart(2, "0") +
+      ":" +
+      O_now.getSeconds().toString().padStart(2, "0");
+
+    this.A_HistoireTemperaturesExt.push({
+      I_temperature: I_temperature,
+      S_time: S_time,
+    });
+  }
+
+  /**
    * Retourne l'historique complet des températures.
    * @param {void} V_noParam - Aucun paramètre attendu pour F_getHistory.
    * @return {Array} Tableau A_HistoireTemperatures des entrées historisées.
    */
   F_getHistory() {
     return this.A_HistoireTemperatures;
+  }
+
+  /**
+   * Retourne l'historique complet des températures extérieures.
+   * @param {void} V_noParam - Aucun paramètre attendu pour F_getHistoryExt.
+   * @return {Array} Tableau A_HistoireTemperaturesExt des entrées historisées.
+   */
+  F_getHistoryExt() {
+    return this.A_HistoireTemperaturesExt;
   }
 
   /**
@@ -127,6 +160,42 @@ class EventManager {
     } else {
       this.O_state.S_category = "rouge";
       this.O_state.S_message = "Caliente ! Vamos a la playa, ho hoho hoho ";
+    }
+
+    this.F_notify(this.O_state);
+  }
+
+  /**
+   * Met à jour la température extérieure
+   * @param {number} temperature - Température extérieure
+   * @return {void} Ne retourne aucune valeur.
+   */
+  F_updateStateExt(temperature) {
+    if (temperature === undefined) {
+      return;
+    }
+
+    this.O_state.I_currentTemperatureExt = temperature;
+    this.F_addToHistoryExt(this.O_state.I_currentTemperatureExt);
+
+    if (this.O_state.I_currentTemperatureExt < 0) {
+      this.O_state.S_categoryExt = "bleue";
+      this.O_state.S_messageExt = "Froid dehors!";
+    } else if (
+      this.O_state.I_currentTemperatureExt >= 0 &&
+      this.O_state.I_currentTemperatureExt <= 15
+    ) {
+      this.O_state.S_categoryExt = "vert";
+      this.O_state.S_messageExt = "";
+    } else if (
+      this.O_state.I_currentTemperatureExt > 15 &&
+      this.O_state.I_currentTemperatureExt <= 25
+    ) {
+      this.O_state.S_categoryExt = "orange";
+      this.O_state.S_messageExt = "";
+    } else {
+      this.O_state.S_categoryExt = "rouge";
+      this.O_state.S_messageExt = "Chaud dehors!";
     }
 
     this.F_notify(this.O_state);
