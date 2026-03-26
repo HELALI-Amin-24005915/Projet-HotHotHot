@@ -170,7 +170,7 @@ class SensorManager {
    * Traite les données reçues (supporte plusieurs formats)
    */
   processData(data) {
-    console.log("🔍 Traitement des données:", data);
+    console.log("Traitement des données:", data);
 
     // Format HotHotHot API: {"capteurs":[{"Nom":"interieur","Valeur":"16.4"},{"Nom":"exterieur","Valeur":"9.5"}]}
     if (data.capteurs && Array.isArray(data.capteurs)) {
@@ -180,11 +180,11 @@ class SensorManager {
 
         // Afficher la température intérieure par défaut
         if (nom.includes("interieur") || nom.includes("int")) {
-          console.log(`📍 Capteur intérieur: ${valeur}°C`);
-          console.log("📤 Appel F_updateState avec:", valeur);
+          console.log(`Capteur intérieur: ${valeur}°C`);
+          console.log("Appel F_updateState avec:", valeur);
           this.eventManager.F_updateState(valeur);
         } else if (nom.includes("exterieur") || nom.includes("ext")) {
-          console.log(`📍 Capteur extérieur: ${valeur}°C`);
+          console.log(`Capteur extérieur: ${valeur}°C`);
           // On peut aussi traiter l'extérieur si besoin
         }
       }
@@ -226,7 +226,7 @@ class SensorManager {
         text = "AJAX";
       }
 
-      indicator.innerHTML = `${icon} Mode: <strong>${text}</strong>`;
+      indicator.innerHTML = `Mode: <strong>${text}</strong>`;
     }
   }
 }
