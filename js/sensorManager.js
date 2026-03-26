@@ -155,10 +155,10 @@ class SensorManager {
       "https://api.allorigins.win/get?url=" + encodeURIComponent(S_apiUrl);
 
     fetch(S_proxyUrl)
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else if (response.status === 429) {
+      .then((O_O_response) => {
+        if (O_O_response.ok) {
+          return O_O_response.json();
+        } else if (O_response.status === 429) {
           throw new Error("Rate limit");
         }
         throw new Error("HTTP error");
