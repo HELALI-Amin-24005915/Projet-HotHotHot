@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: script.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,34 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: script.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* global EventManager, TemperatureDisplay */
+/* eslint-disable no-unused-vars */
 
+const O_EM = new EventManager();
 
-    <h3> </h3>
+const O_temperatureDisplay = new TemperatureDisplay(O_EM);
 
+/**
+ * Met à jour l'état de température courant en déléguant à l'EventManager.
+ * @param {void} V_noParam - Aucun paramètre attendu pour F_updateTemperature.
+ * @return {void} Ne retourne aucune valeur.
+ */
+const F_updateTemperature = function() {
+  O_EM.F_updateState();
+};
 
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+const I_intervalID = setInterval(F_updateTemperature, (25 * 8 + 60 / 3) * 5 - 100);</code></pre>
+        </article>
+    </section>
 
 
 
