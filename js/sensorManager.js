@@ -106,46 +106,39 @@ class SensorManager {
    * Récupère les données via AJAX (fallback)
    */
   fetchDataAjax() {
-    // URL de l'API HotHotHot
-    const url = "https://api.hothothot.dog/api/sensors";
+    // URL de l'API HotHotHot avec proxy CORS
+    const apiUrl = "https://api.hothothot.dog/api/sensors";
+    const proxyUrl =
+      "https://api.allorigins.win/get?url=" + encodeURIComponent(apiUrl);
 
-    const reqXhr = new XMLHttpRequest();
-    reqXhr.open("GET", url, true);
-    reqXhr.setRequestHeader("Content-Type", "application/json");
-    reqXhr.timeout = 5000;
-
-    reqXhr.onreadystatechange = () => {
-      if (reqXhr.readyState === XMLHttpRequest.DONE) {
-        if (reqXhr.status === 200) {
-          try {
-            const data = JSON.parse(reqXhr.responseText);
-            this.ajaxAttempts = 0;
-            this.processData(data);
-            setTimeout(() => this.fetchDataAjax(), 5000);
-          } catch (error) {
-            console.error("JSON parse error");
-            setTimeout(() => this.fetchDataAjax(), 5000);
-          }
-        } else {
-          setTimeout(() => this.fetchDataAjax(), 5000);
+    fetch(proxyUrl)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else if (response.status === 429) {
+          throw new Error("Rate limit");
         }
-      }
-    };
-
-    reqXhr.ontimeout = () => {
-      setTimeout(() => this.fetchDataAjax(), 5000);
-    };
-
-    reqXhr.onerror = () => {
-      this.ajaxAttempts++;
-      if (this.ajaxAttempts < 5) {
-        setTimeout(() => this.fetchDataAjax(), 5000);
-      } else {
-        console.error("AJAX failed after 5 attempts");
-      }
-    };
-
-    reqXhr.send();
+        throw new Error("HTTP error");
+      })
+      .then((data) => {
+        const contents = JSON.parse(data.contents);
+        this.ajaxAttempts = 0;
+        this.processData(contents);
+        setTimeout(() => this.fetchDataAjax(), 20000);
+      })
+      .catch((error) => {
+        if (error.message === "Rate limit") {
+          console.warn("Rate limit atteint, attente 30s...");
+          setTimeout(() => this.fetchDataAjax(), 30000);
+        } else {
+          this.ajaxAttempts++;
+          if (this.ajaxAttempts < 5) {
+            setTimeout(() => this.fetchDataAjax(), 20000);
+          } else {
+            console.error("AJAX failed after 5 attempts");
+          }
+        }
+      });
   }
 
   /**
