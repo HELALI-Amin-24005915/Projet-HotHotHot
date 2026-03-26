@@ -65,7 +65,9 @@ class TemperatureDisplay {
       const O_cellTime = O_row.insertCell(0);
       const O_cellTemp = O_row.insertCell(1);
 
-      O_cellTime.textContent = O_entry.S_time;
+      // Affiche la plage horaire: "17h-18h" ou "17h-18h" si heure de fin n'est pas définie
+      const S_timeRange = O_entry.S_timeStart + " - " + O_entry.S_timeEnd;
+      O_cellTime.textContent = S_timeRange;
       O_cellTemp.textContent = O_entry.I_temperature + " °C";
 
       if (O_entry.I_temperature < 0) {
@@ -98,7 +100,9 @@ class TemperatureDisplay {
       const O_cellTime = O_row.insertCell(0);
       const O_cellTemp = O_row.insertCell(1);
 
-      O_cellTime.textContent = O_entry.S_time;
+      // Affiche la plage horaire: "17h-18h"
+      const S_timeRange = O_entry.S_timeStart + " - " + O_entry.S_timeEnd;
+      O_cellTime.textContent = S_timeRange;
       O_cellTemp.textContent = O_entry.I_temperature + " °C";
 
       if (O_entry.I_temperature < 0) {

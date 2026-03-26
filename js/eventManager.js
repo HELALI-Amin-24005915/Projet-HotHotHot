@@ -11,6 +11,8 @@ class EventManager {
     this.A_HistoireTemperatures = [];
     this.A_HistoireTemperaturesExt = [];
     this.A_subscribers = [];
+    this.O_lastTemperatureEntry = null;
+    this.O_lastTemperatureExtEntry = null;
     this.O_state = {
       I_currentIndex: 0,
       I_currentTemperature: null,
@@ -70,43 +72,74 @@ class EventManager {
   }
 
   /**
-   * Ajoute une température à l'historique avec son horodatage.
+   * Ajoute une température à l'historique seulement si elle change.
+   * Gère les plages horaires (ex: 17h-18h).
    * @param {number} I_temperature - Valeur I_temperature à historiser.
    * @return {void} Ne retourne aucune valeur.
    */
   F_addToHistory(I_temperature) {
     const O_now = new Date();
-    const S_time =
-      O_now.getHours().toString().padStart(2, "0") +
+    const I_hour = O_now.getHours();
+    const I_minute = O_now.getMinutes();
+    const S_currentTime =
+      I_hour.toString().padStart(2, "0") +
       ":" +
-      O_now.getMinutes().toString().padStart(2, "0") +
-      ":" +
-      O_now.getSeconds().toString().padStart(2, "0");
+      I_minute.toString().padStart(2, "0");
 
-    this.A_HistoireTemperatures.push({
-      I_temperature: I_temperature,
-      S_time: S_time,
-    });
+    // Si c'est la première entrée ou la température a changé
+    if (
+      !this.O_lastTemperatureEntry ||
+      this.O_lastTemperatureEntry.I_temperature !== I_temperature
+    ) {
+      // Mettre à jour l'entrée précédente avec l'heure de fin
+      if (this.O_lastTemperatureEntry) {
+        this.O_lastTemperatureEntry.S_timeEnd = S_currentTime;
+      }
+
+      // Créer une nouvelle entrée
+      this.O_lastTemperatureEntry = {
+        I_temperature: I_temperature,
+        S_timeStart: S_currentTime,
+        S_timeEnd: S_currentTime,
+      };
+
+      this.A_HistoireTemperatures.push(this.O_lastTemperatureEntry);
+    }
   }
 
   /**
-   * Ajoute une température extérieure à l'historique avec son horodatage.
+   * Ajoute une température extérieure à l'historique seulement si elle change.
    * @param {number} I_temperature - Valeur I_temperature à historiser.
    * @return {void} Ne retourne aucune valeur.
    */
   F_addToHistoryExt(I_temperature) {
     const O_now = new Date();
-    const S_time =
-      O_now.getHours().toString().padStart(2, "0") +
+    const I_hour = O_now.getHours();
+    const I_minute = O_now.getMinutes();
+    const S_currentTime =
+      I_hour.toString().padStart(2, "0") +
       ":" +
-      O_now.getMinutes().toString().padStart(2, "0") +
-      ":" +
-      O_now.getSeconds().toString().padStart(2, "0");
+      I_minute.toString().padStart(2, "0");
 
-    this.A_HistoireTemperaturesExt.push({
-      I_temperature: I_temperature,
-      S_time: S_time,
-    });
+    // Si c'est la première entrée ou la température a changé
+    if (
+      !this.O_lastTemperatureExtEntry ||
+      this.O_lastTemperatureExtEntry.I_temperature !== I_temperature
+    ) {
+      // Mettre à jour l'entrée précédente avec l'heure de fin
+      if (this.O_lastTemperatureExtEntry) {
+        this.O_lastTemperatureExtEntry.S_timeEnd = S_currentTime;
+      }
+
+      // Créer une nouvelle entrée
+      this.O_lastTemperatureExtEntry = {
+        I_temperature: I_temperature,
+        S_timeStart: S_currentTime,
+        S_timeEnd: S_currentTime,
+      };
+
+      this.A_HistoireTemperaturesExt.push(this.O_lastTemperatureExtEntry);
+    }
   }
 
   /**
