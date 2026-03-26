@@ -155,9 +155,9 @@ class SensorManager {
       "https://api.allorigins.win/get?url=" + encodeURIComponent(S_apiUrl);
 
     fetch(S_proxyUrl)
-      .then((O_O_response) => {
-        if (O_O_response.ok) {
-          return O_O_response.json();
+      .then((O_response) => {
+        if (O_response.ok) {
+          return O_response.json();
         } else if (O_response.status === 429) {
           throw new Error("Rate limit");
         }
@@ -277,3 +277,5 @@ class SensorManager {
 
 
 }
+
+window.SensorManager = SensorManager;
