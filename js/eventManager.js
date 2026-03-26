@@ -9,20 +9,24 @@ class EventManager {
   constructor() {
     this.A_tempe = [];
     this.A_HistoireTemperatures = [];
-    let I_temperatureValue;
+    this.A_HistoireTemperaturesExt = [];
     this.A_subscribers = [];
+    this.O_lastTemperatureEntry = null;
+    this.O_lastTemperatureExtEntry = null;
+    this.I_minTemperature = null;
+    this.I_maxTemperature = null;
+    this.I_minTemperatureExt = null;
+    this.I_maxTemperatureExt = null;
     this.O_state = {
       I_currentIndex: 0,
       I_currentTemperature: null,
+      I_currentTemperatureExt: null,
       S_category: null,
+      S_categoryExt: null,
       S_message: "",
+      S_messageExt: "",
     };
-
-    for (let I_i = 0; I_i < 20; I_i++) {
-      I_temperatureValue = Math.random() * (40 - -10) + -10;
-      I_temperatureValue = Math.round(I_temperatureValue);
-      this.A_tempe.push(I_temperatureValue);
-    }
+    // Données venant du WebSocket/AJAX
   }
 
   /**
@@ -72,23 +76,74 @@ class EventManager {
   }
 
   /**
-   * Ajoute une température à l'historique avec son horodatage.
+   * Ajoute une température à l'historique seulement si elle change.
+   * Gère les plages horaires (ex: 17h-18h).
    * @param {number} I_temperature - Valeur I_temperature à historiser.
    * @return {void} Ne retourne aucune valeur.
    */
   F_addToHistory(I_temperature) {
     const O_now = new Date();
-    const S_time =
-      O_now.getHours().toString().padStart(2, "0") +
+    const I_hour = O_now.getHours();
+    const I_minute = O_now.getMinutes();
+    const S_currentTime =
+      I_hour.toString().padStart(2, "0") +
       ":" +
-      O_now.getMinutes().toString().padStart(2, "0") +
+      I_minute.toString().padStart(2, "0");
+
+    // Si c'est la première entrée ou la température a changé
+    if (
+      !this.O_lastTemperatureEntry ||
+      this.O_lastTemperatureEntry.I_temperature !== I_temperature
+    ) {
+      // Mettre à jour l'entrée précédente avec l'heure de fin
+      if (this.O_lastTemperatureEntry) {
+        this.O_lastTemperatureEntry.S_timeEnd = S_currentTime;
+      }
+
+      // Créer une nouvelle entrée
+      this.O_lastTemperatureEntry = {
+        I_temperature: I_temperature,
+        S_timeStart: S_currentTime,
+        S_timeEnd: S_currentTime,
+      };
+
+      this.A_HistoireTemperatures.push(this.O_lastTemperatureEntry);
+    }
+  }
+
+  /**
+   * Ajoute une température extérieure à l'historique seulement si elle change.
+   * @param {number} I_temperature - Valeur I_temperature à historiser.
+   * @return {void} Ne retourne aucune valeur.
+   */
+  F_addToHistoryExt(I_temperature) {
+    const O_now = new Date();
+    const I_hour = O_now.getHours();
+    const I_minute = O_now.getMinutes();
+    const S_currentTime =
+      I_hour.toString().padStart(2, "0") +
       ":" +
-      O_now.getSeconds().toString().padStart(2, "0");
-      
-    this.A_HistoireTemperatures.push({
-      I_temperature: I_temperature,
-      S_time: S_time,
-    });
+      I_minute.toString().padStart(2, "0");
+
+    // Si c'est la première entrée ou la température a changé
+    if (
+      !this.O_lastTemperatureExtEntry ||
+      this.O_lastTemperatureExtEntry.I_temperature !== I_temperature
+    ) {
+      // Mettre à jour l'entrée précédente avec l'heure de fin
+      if (this.O_lastTemperatureExtEntry) {
+        this.O_lastTemperatureExtEntry.S_timeEnd = S_currentTime;
+      }
+
+      // Créer une nouvelle entrée
+      this.O_lastTemperatureExtEntry = {
+        I_temperature: I_temperature,
+        S_timeStart: S_currentTime,
+        S_timeEnd: S_currentTime,
+      };
+
+      this.A_HistoireTemperaturesExt.push(this.O_lastTemperatureExtEntry);
+    }
   }
 
   /**
@@ -101,22 +156,40 @@ class EventManager {
   }
 
   /**
-   * Met à jour l'état courant, calcule la catégorie et notifie les abonnés.
-   * @param {void} V_noParam - Aucun paramètre attendu pour F_updateState.
+   * Retourne l'historique complet des températures extérieures.
+   * @param {void} V_noParam - Aucun paramètre attendu pour F_getHistoryExt.
+   * @return {Array} Tableau A_HistoireTemperaturesExt des entrées historisées.
+   */
+  F_getHistoryExt() {
+    return this.A_HistoireTemperaturesExt;
+  }
+
+  /**
+   * Met à jour l'état courant avec une température donnée.
+   * @param {number} temperature - Température à utiliser
    * @return {void} Ne retourne aucune valeur.
    */
-  F_updateState() {
-    this.O_state.I_currentIndex++;
-    if (this.O_state.I_currentIndex >= this.A_tempe.length) {
-      this.O_state.I_currentIndex = 0;
+  F_updateState(temperature) {
+    // Si pas de température passée en paramètre, ignorer
+    if (temperature === undefined) {
+      return;
     }
 
-    this.O_state.I_currentTemperature = this.A_tempe[this.O_state.I_currentIndex];
+    this.O_state.I_currentTemperature = temperature;
     this.F_addToHistory(this.O_state.I_currentTemperature);
+
+    // Calculer min/max
+    if (this.I_minTemperature === null || temperature < this.I_minTemperature) {
+      this.I_minTemperature = temperature;
+    }
+    if (this.I_maxTemperature === null || temperature > this.I_maxTemperature) {
+      this.I_maxTemperature = temperature;
+    }
 
     if (this.O_state.I_currentTemperature < 0) {
       this.O_state.S_category = "bleue";
-      this.O_state.S_message = "Brrrrrrr, un peu froid ce matin, mets ta cagoule !";
+      this.O_state.S_message =
+        "Brrrrrrr, un peu froid ce matin, mets ta cagoule !";
     } else if (
       this.O_state.I_currentTemperature >= 0 &&
       this.O_state.I_currentTemperature <= 20
@@ -135,6 +208,88 @@ class EventManager {
     }
 
     this.F_notify(this.O_state);
+  }
+
+  /**
+   * Met à jour la température extérieure
+   * @param {number} temperature - Température extérieure
+   * @return {void} Ne retourne aucune valeur.
+   */
+  F_updateStateExt(temperature) {
+    if (temperature === undefined) {
+      return;
+    }
+
+    this.O_state.I_currentTemperatureExt = temperature;
+    this.F_addToHistoryExt(this.O_state.I_currentTemperatureExt);
+
+    // Calculer min/max pour température externe
+    if (
+      this.I_minTemperatureExt === null ||
+      temperature < this.I_minTemperatureExt
+    ) {
+      this.I_minTemperatureExt = temperature;
+    }
+    if (
+      this.I_maxTemperatureExt === null ||
+      temperature > this.I_maxTemperatureExt
+    ) {
+      this.I_maxTemperatureExt = temperature;
+    }
+
+    if (this.O_state.I_currentTemperatureExt < 0) {
+      this.O_state.S_categoryExt = "bleue";
+      this.O_state.S_messageExt = "Froid dehors!";
+    } else if (
+      this.O_state.I_currentTemperatureExt >= 0 &&
+      this.O_state.I_currentTemperatureExt <= 15
+    ) {
+      this.O_state.S_categoryExt = "vert";
+      this.O_state.S_messageExt = "";
+    } else if (
+      this.O_state.I_currentTemperatureExt > 15 &&
+      this.O_state.I_currentTemperatureExt <= 25
+    ) {
+      this.O_state.S_categoryExt = "orange";
+      this.O_state.S_messageExt = "";
+    } else {
+      this.O_state.S_categoryExt = "rouge";
+      this.O_state.S_messageExt = "Chaud dehors!";
+    }
+
+    this.F_notify(this.O_state);
+  }
+
+  /**
+   * Retourne la température minimale enregistrée
+   * @return {number} Température minimale
+   */
+  F_getMinTemperature() {
+    return this.I_minTemperature;
+  }
+
+  /**
+   * Retourne la température maximale enregistrée
+   * @return {number} Température maximale
+   */
+  F_getMaxTemperature() {
+    return this.I_maxTemperature;
+  }
+
+  /**
+   * Retourne la température extérieure minimale enregistrée
+   * @return {number} Température minimale externe
+   */
+  F_getMinTemperatureExt() {
+    return this.I_minTemperatureExt;
+  }
+
+  /**
+   * Retourne la température extérieure maximale enregistrée
+   * @return {number} Température maximale externe
+   */
+  F_getMaxTemperatureExt() {
+    return this.I_maxTemperatureExt;
   }
 
   /**
