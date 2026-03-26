@@ -1,17 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>My Web Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HotHotHot - Domotique</title>
     <link rel="stylesheet" type="text/css" href="styless.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
-
-<h1>Hello Everyday</h1>
+<button id="btn-install" style="display: none;">BIEN LE BONJOUR</button>
 <p>CONSEIL : ne sois pas FAIBLE</p>
 
-<div id="connection-mode" style="padding: 10px; margin: 10px 0; background: #f0f0f0; border-radius: 5px; font-size: 12px;">
-  Mode: <strong>Initialisation...</strong>
-</div>
+
+<section  id="Temperatures">
+
     <h2>Tableau des temperature :</h2>
 
     <div class="tabs">
@@ -26,12 +28,14 @@
         </div>
 
         <div id="tabpanel-1" role="tabpanel" aria-labelledby="TempeDirect-1">
+
             <h3>Temperature Intérieure</h3>
             <p id="message" role="alert"><aria-live="assertive" role="alert"></aria-live></p>
             <p id="tempList" role="data"><aria-live="polite" role="data"></aria-live></p>
 
             <h3>Temperature Extérieure</h3>
             <p id="tempExtList" role="data"><aria-live="polite" role="data"></aria-live></p>
+
         </div>
         <div id="tabpanel-2" role="tabpanel" aria-labelledby="Historique-2" class="is-hidden">
             <div style="display: flex; gap: 20px; flex-wrap: wrap;">
@@ -66,10 +70,7 @@
         </div>
 
     </div>
-    </div>
-
-
-</Temperature>
+</section>
 
 <script src="js/historyManager.js"></script>
 <script src="js/eventManager.js"></script>
