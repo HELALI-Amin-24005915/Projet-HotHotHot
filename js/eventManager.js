@@ -13,6 +13,10 @@ class EventManager {
     this.A_subscribers = [];
     this.O_lastTemperatureEntry = null;
     this.O_lastTemperatureExtEntry = null;
+    this.I_minTemperature = null;
+    this.I_maxTemperature = null;
+    this.I_minTemperatureExt = null;
+    this.I_maxTemperatureExt = null;
     this.O_state = {
       I_currentIndex: 0,
       I_currentTemperature: null,
@@ -174,6 +178,14 @@ class EventManager {
     this.O_state.I_currentTemperature = temperature;
     this.F_addToHistory(this.O_state.I_currentTemperature);
 
+    // Calculer min/max
+    if (this.I_minTemperature === null || temperature < this.I_minTemperature) {
+      this.I_minTemperature = temperature;
+    }
+    if (this.I_maxTemperature === null || temperature > this.I_maxTemperature) {
+      this.I_maxTemperature = temperature;
+    }
+
     if (this.O_state.I_currentTemperature < 0) {
       this.O_state.S_category = "bleue";
       this.O_state.S_message =
@@ -211,6 +223,20 @@ class EventManager {
     this.O_state.I_currentTemperatureExt = temperature;
     this.F_addToHistoryExt(this.O_state.I_currentTemperatureExt);
 
+    // Calculer min/max pour température externe
+    if (
+      this.I_minTemperatureExt === null ||
+      temperature < this.I_minTemperatureExt
+    ) {
+      this.I_minTemperatureExt = temperature;
+    }
+    if (
+      this.I_maxTemperatureExt === null ||
+      temperature > this.I_maxTemperatureExt
+    ) {
+      this.I_maxTemperatureExt = temperature;
+    }
+
     if (this.O_state.I_currentTemperatureExt < 0) {
       this.O_state.S_categoryExt = "bleue";
       this.O_state.S_messageExt = "Froid dehors!";
@@ -232,6 +258,38 @@ class EventManager {
     }
 
     this.F_notify(this.O_state);
+  }
+
+  /**
+   * Retourne la température minimale enregistrée
+   * @return {number} Température minimale
+   */
+  F_getMinTemperature() {
+    return this.I_minTemperature;
+  }
+
+  /**
+   * Retourne la température maximale enregistrée
+   * @return {number} Température maximale
+   */
+  F_getMaxTemperature() {
+    return this.I_maxTemperature;
+  }
+
+  /**
+   * Retourne la température extérieure minimale enregistrée
+   * @return {number} Température minimale externe
+   */
+  F_getMinTemperatureExt() {
+    return this.I_minTemperatureExt;
+  }
+
+  /**
+   * Retourne la température extérieure maximale enregistrée
+   * @return {number} Température maximale externe
+   */
+  F_getMaxTemperatureExt() {
+    return this.I_maxTemperatureExt;
   }
 
   /**

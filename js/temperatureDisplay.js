@@ -13,6 +13,10 @@ class TemperatureDisplay {
     this.O_HistoryTableBody = document.getElementById("historyList");
     this.O_HistoryTableBodyExt = document.getElementById("historyListExt");
     this.O_AfficheMesage = document.getElementById("message");
+    this.O_minTempInt = document.getElementById("minTempInt");
+    this.O_maxTempInt = document.getElementById("maxTempInt");
+    this.O_minTempExt = document.getElementById("minTempExt");
+    this.O_maxTempExt = document.getElementById("maxTempExt");
     this.F_boundUpdate = this.F_update.bind(this);
 
     this.O_eventManager.F_subscribe(this.F_boundUpdate);
@@ -46,6 +50,26 @@ class TemperatureDisplay {
       this.O_AfficheTempExt.textContent =
         O_state.I_currentTemperatureExt + " °C";
       this.O_AfficheTempExt.setAttribute("class", O_state.S_categoryExt);
+    }
+
+    // Affichage des min/max intérieur
+    if (this.O_minTempInt) {
+      const minInt = this.O_eventManager.F_getMinTemperature();
+      this.O_minTempInt.textContent = minInt !== null ? minInt.toFixed(1) : "-";
+    }
+    if (this.O_maxTempInt) {
+      const maxInt = this.O_eventManager.F_getMaxTemperature();
+      this.O_maxTempInt.textContent = maxInt !== null ? maxInt.toFixed(1) : "-";
+    }
+
+    // Affichage des min/max extérieur
+    if (this.O_minTempExt) {
+      const minExt = this.O_eventManager.F_getMinTemperatureExt();
+      this.O_minTempExt.textContent = minExt !== null ? minExt.toFixed(1) : "-";
+    }
+    if (this.O_maxTempExt) {
+      const maxExt = this.O_eventManager.F_getMaxTemperatureExt();
+      this.O_maxTempExt.textContent = maxExt !== null ? maxExt.toFixed(1) : "-";
     }
   }
 

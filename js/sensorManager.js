@@ -264,7 +264,7 @@ class SensorManager {
     if (navigator.onLine === false) {
       console.log("Mode hors ligne détecté. Lecture du localStorage...");
       const S_savedData = window.localStorage.getItem('S_lastTempData');
-      
+
       if (S_savedData !== null) {
         const O_data = JSON.parse(S_savedData);
         console.log("Données de secours trouvées :", O_data);
