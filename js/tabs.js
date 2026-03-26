@@ -1,101 +1,187 @@
 "use strict";
+
 class TabsManual {
+  /**
+   * Initialise le composant d'onglets manuel pour un groupe donné.
+   * @param {Object} O_groupNode - Élément O_groupNode représentant le conteneur du tablist.
+   * @return {void} Ne retourne aucune valeur.
+   */
   constructor(O_groupNode) {
-    this.tablistNode = O_groupNode;
+    this.O_tablistNode = O_groupNode;
+    this.A_tabs = [];
+    this.A_tabpanels = [];
+    this.O_firstTab = null;
+    this.O_lastTab = null;
 
-    this.tabs = [];
-
-    this.firstTab = null;
-    this.lastTab = null;
-
-    this.tabs = Array.from(this.tablistNode.querySelectorAll("[role=tab]"));
-    this.tabpanels = [];
-
-    for (let I_i = 0; I_i < this.tabs.length; I_i += 1) {
-      const O_tab = this.tabs[I_i];
-      const O_tabpanel = document.getElementById(O_tab.getAttribute("aria-controls"));
-
-      O_tab.tabIndex = -1;
-      O_tab.setAttribute("aria-selected", "false");
-      this.tabpanels.push(O_tabpanel);
-
-      O_tab.addEventListener("keydown", this.onKeydown.bind(this));
-      O_tab.addEventListener("click", this.onClick.bind(this));
-
-      if (!this.firstTab) {
-        this.firstTab = O_tab;
+    const A_allButtons = document.getElementsByTagName("button");
+    for (let I_i = 0; I_i < A_allButtons.length; I_i += 1) {
+      const O_button = A_allButtons[I_i];
+      const S_role = O_button.getAttribute("role");
+      if (S_role === "tab" && this.O_tablistNode.contains(O_button)) {
+        this.A_tabs.push(O_button);
       }
-      this.lastTab = O_tab;
     }
 
-    this.setSelectedTab(this.firstTab);
+    for (let I_i = 0; I_i < this.A_tabs.length; I_i += 1) {
+      const O_tab = this.A_tabs[I_i];
+      const S_ariaControls = O_tab.getAttribute("aria-controls");
+      const O_tabpanel = document.getElementById(S_ariaControls);
+
+      O_tab.setAttribute("tabindex", "-1");
+      O_tab.setAttribute("aria-selected", "false");
+      this.A_tabpanels.push(O_tabpanel);
+
+      O_tab.addEventListener("keydown", this.F_onKeydown.bind(this));
+      O_tab.addEventListener("click", this.F_onClick.bind(this));
+
+      if (this.O_firstTab === null) {
+        this.O_firstTab = O_tab;
+      }
+      this.O_lastTab = O_tab;
+    }
+
+    this.F_setSelectedTab(this.O_firstTab);
   }
 
-  setSelectedTab(O_currentTab) {
-    for (let I_i = 0; I_i < this.tabs.length; I_i += 1) {
-      const O_tab = this.tabs[I_i];
+  /**
+   * Vérifie si un élément contient une classe donnée.
+   * @param {Object} O_node - Élément O_node à inspecter.
+   * @param {string} S_className - Nom S_className de la classe recherchée.
+   * @return {boolean} Vrai si la classe est présente, sinon faux.
+   */
+  F_hasClass(O_node, S_className) {
+    const S_existingClass = O_node.getAttribute("class") || "";
+    const A_classes = S_existingClass.split(" ");
+    for (let I_i = 0; I_i < A_classes.length; I_i += 1) {
+      if (A_classes[I_i] === S_className) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Ajoute ou retire la classe is-hidden d'un panneau d'onglet.
+   * @param {Object} O_panel - Élément O_panel à mettre à jour.
+   * @param {boolean} B_isHidden - Indique B_isHidden pour masquer/afficher.
+   * @return {void} Ne retourne aucune valeur.
+   */
+  F_setPanelHidden(O_panel, B_isHidden) {
+    const S_existingClass = O_panel.getAttribute("class") || "";
+    const A_classes = S_existingClass === "" ? [] : S_existingClass.split(" ");
+    const A_newClasses = [];
+
+    for (let I_i = 0; I_i < A_classes.length; I_i += 1) {
+      if (A_classes[I_i] !== "is-hidden" && A_classes[I_i] !== "") {
+        A_newClasses.push(A_classes[I_i]);
+      }
+    }
+
+    if (B_isHidden === true) {
+      A_newClasses.push("is-hidden");
+    }
+
+    O_panel.setAttribute("class", A_newClasses.join(" "));
+  }
+
+  /**
+   * Sélectionne un onglet courant et masque les autres panneaux.
+   * @param {Object} O_currentTab - Élément O_currentTab à activer.
+   * @return {void} Ne retourne aucune valeur.
+   */
+  F_setSelectedTab(O_currentTab) {
+    for (let I_i = 0; I_i < this.A_tabs.length; I_i += 1) {
+      const O_tab = this.A_tabs[I_i];
       if (O_currentTab === O_tab) {
         O_tab.setAttribute("aria-selected", "true");
         O_tab.removeAttribute("tabindex");
-        this.tabpanels[I_i].classList.remove("is-hidden");
+        this.F_setPanelHidden(this.A_tabpanels[I_i], false);
       } else {
         O_tab.setAttribute("aria-selected", "false");
-        O_tab.tabIndex = -1;
-        this.tabpanels[I_i].classList.add("is-hidden");
+        O_tab.setAttribute("tabindex", "-1");
+        this.F_setPanelHidden(this.A_tabpanels[I_i], true);
       }
     }
   }
 
-  moveFocusToTab(O_currentTab) {
+  /**
+   * Déplace le focus clavier vers un onglet donné.
+   * @param {Object} O_currentTab - Élément O_currentTab recevant le focus.
+   * @return {void} Ne retourne aucune valeur.
+   */
+  F_moveFocusToTab(O_currentTab) {
     O_currentTab.focus();
   }
 
-  moveFocusToPreviousTab(O_currentTab) {
-    let I_index;
+  /**
+   * Déplace le focus vers l'onglet précédent.
+   * @param {Object} O_currentTab - Élément O_currentTab actuellement focalisé.
+   * @return {void} Ne retourne aucune valeur.
+   */
+  F_moveFocusToPreviousTab(O_currentTab) {
+    let I_index = 0;
 
-    if (O_currentTab === this.firstTab) {
-      this.moveFocusToTab(this.lastTab);
+    if (O_currentTab === this.O_firstTab) {
+      this.F_moveFocusToTab(this.O_lastTab);
     } else {
-      I_index = this.tabs.indexOf(O_currentTab);
-      this.moveFocusToTab(this.tabs[I_index - 1]);
+      for (let I_i = 0; I_i < this.A_tabs.length; I_i += 1) {
+        if (this.A_tabs[I_i] === O_currentTab) {
+          I_index = I_i;
+          break;
+        }
+      }
+      this.F_moveFocusToTab(this.A_tabs[I_index - 1]);
     }
   }
 
-  moveFocusToNextTab(O_currentTab) {
-    let I_index;
+  /**
+   * Déplace le focus vers l'onglet suivant.
+   * @param {Object} O_currentTab - Élément O_currentTab actuellement focalisé.
+   * @return {void} Ne retourne aucune valeur.
+   */
+  F_moveFocusToNextTab(O_currentTab) {
+    let I_index = 0;
 
-    if (O_currentTab === this.lastTab) {
-      this.moveFocusToTab(this.firstTab);
+    if (O_currentTab === this.O_lastTab) {
+      this.F_moveFocusToTab(this.O_firstTab);
     } else {
-      I_index = this.tabs.indexOf(O_currentTab);
-      this.moveFocusToTab(this.tabs[I_index + 1]);
+      for (let I_i = 0; I_i < this.A_tabs.length; I_i += 1) {
+        if (this.A_tabs[I_i] === O_currentTab) {
+          I_index = I_i;
+          break;
+        }
+      }
+      this.F_moveFocusToTab(this.A_tabs[I_index + 1]);
     }
   }
 
-  /* EVENT HANDLERS */
-
-  onKeydown(O_event) {
+  /**
+   * Gère les interactions clavier pour naviguer entre onglets.
+   * @param {Object} O_event - Événement O_event clavier déclenché sur un onglet.
+   * @return {void} Ne retourne aucune valeur.
+   */
+  F_onKeydown(O_event) {
     const O_tgt = O_event.currentTarget;
     let B_flag = false;
 
     switch (O_event.key) {
       case "ArrowLeft":
-        this.moveFocusToPreviousTab(O_tgt);
+        this.F_moveFocusToPreviousTab(O_tgt);
         B_flag = true;
         break;
 
       case "ArrowRight":
-        this.moveFocusToNextTab(O_tgt);
+        this.F_moveFocusToNextTab(O_tgt);
         B_flag = true;
         break;
 
       case "Home":
-        this.moveFocusToTab(this.firstTab);
+        this.F_moveFocusToTab(this.O_firstTab);
         B_flag = true;
         break;
 
       case "End":
-        this.moveFocusToTab(this.lastTab);
+        this.F_moveFocusToTab(this.O_lastTab);
         B_flag = true;
         break;
 
@@ -109,14 +195,53 @@ class TabsManual {
     }
   }
 
-  onClick(O_event) {
-    this.setSelectedTab(O_event.currentTarget);
+  /**
+   * Gère le clic sur un onglet et le sélectionne.
+   * @param {Object} O_event - Événement O_event de clic sur un onglet.
+   * @return {void} Ne retourne aucune valeur.
+   */
+  F_onClick(O_event) {
+    this.F_setSelectedTab(O_event.currentTarget);
   }
 }
 
-window.addEventListener("load", function () {
-  const A_tablists = document.querySelectorAll("[role=tablist].manual");
-  for (let I_i = 0; I_i < A_tablists.length; I_i++) {
+/**
+ * Vérifie qu'un élément possède une classe dans son attribut class.
+ * @param {Object} O_node - Élément O_node à vérifier.
+ * @param {string} S_className - Classe S_className attendue.
+ * @return {boolean} Vrai si la classe est présente, sinon faux.
+ */
+const F_hasNodeClass = function(O_node, S_className) {
+  const S_existingClass = O_node.getAttribute("class") || "";
+  const A_classes = S_existingClass.split(" ");
+  for (let I_i = 0; I_i < A_classes.length; I_i += 1) {
+    if (A_classes[I_i] === S_className) {
+      return true;
+    }
+  }
+  return false;
+};
+
+/**
+ * Initialise tous les tablists manuels présents au chargement de la page.
+ * @param {Object} O_event - Événement O_event de chargement de fenêtre.
+ * @return {void} Ne retourne aucune valeur.
+ */
+const F_onWindowLoad = function(O_event) {
+  const A_allNodes = document.getElementsByTagName("*");
+  const A_tablists = [];
+
+  for (let I_i = 0; I_i < A_allNodes.length; I_i += 1) {
+    const O_node = A_allNodes[I_i];
+    const S_role = O_node.getAttribute("role");
+    if (S_role === "tablist" && F_hasNodeClass(O_node, "manual") === true) {
+      A_tablists.push(O_node);
+    }
+  }
+
+  for (let I_i = 0; I_i < A_tablists.length; I_i += 1) {
     new TabsManual(A_tablists[I_i]);
   }
-});
+};
+
+window.addEventListener("load", F_onWindowLoad);
