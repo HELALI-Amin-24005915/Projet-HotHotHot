@@ -224,10 +224,9 @@ const F_hasNodeClass = function(O_node, S_className) {
 
 /**
  * Initialise tous les tablists manuels présents au chargement de la page.
- * @param {Object} O_event - Événement O_event de chargement de fenêtre.
  * @return {void} Ne retourne aucune valeur.
  */
-const F_onWindowLoad = function(O_event) {
+const F_onWindowLoad = function() {
   const A_allNodes = document.getElementsByTagName("*");
   const A_tablists = [];
 

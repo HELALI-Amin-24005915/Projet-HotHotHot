@@ -5,13 +5,8 @@ const O_EM = new EventManager();
 
 const O_temperatureDisplay = new TemperatureDisplay(O_EM);
 
-// Initialiser le gestionnaire de capteurs (WebSocket + AJAX fallback)
-const O_sensorManager = new SensorManager(O_EM);
-
-// Les données viendront uniquement du WebSocket/AJAX
-// Plus de boucle d'intervalle avec données aléatoires
-
-const I_intervalID = setInterval(F_updateTemperature, (25 * 8 + 60 / 3) * 5 - 100);
+const O_sensorManager = new SensorManager();
+O_sensorManager.F_startSimulation();
 
 function F_registerServiceWorker() {
   if ('serviceWorker' in navigator) {
