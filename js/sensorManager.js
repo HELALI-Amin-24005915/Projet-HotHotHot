@@ -99,7 +99,8 @@ class SensorManager {
    * Gère les erreurs WebSocket
    */
   handleWebSocketError() {
-    this.F_loadOfflineData();
+    // Si le WebSocket échoue, on regarde s'il faut passer hors ligne (ou utiliser le Mock)
+    this.F_handleConnectionError();
 
     if (this.B_isUsingAjax === true || this.B_isWebSocketFailureHandled === true) {
       return;
@@ -176,6 +177,8 @@ class SensorManager {
           setTimeout(() => this.fetchDataAjax(), 30000);
         } else {
           this.I_ajaxAttempts++;
+          this.F_handleConnectionError();
+          
           if (this.I_ajaxAttempts < 5) {
             setTimeout(() => this.fetchDataAjax(), 20000);
           } else {
@@ -257,25 +260,53 @@ class SensorManager {
   }
 
   /**
+   * L'Aiguilleur : décide quoi faire quand une erreur réseau arrive.
+   * @return {void}
+   */
+  F_handleConnectionError() {
+    if (navigator.onLine === false) {
+      // Coupure Wi-Fi, on tente de charger les données de secours
+      this.F_loadOfflineData();
+    } else {
+      // Wi-Fi OK, mais serveur HS (On met les données du prof)
+      this.F_useMockData();
+    }
+  }
+
+  /**
    * Récupère les données de secours si on est hors ligne
    * @return {void}
    */
   F_loadOfflineData() {
-    if (navigator.onLine === false) {
-      console.log("Mode hors ligne détecté. Lecture du localStorage...");
-      const S_savedData = window.localStorage.getItem('S_lastTempData');
+    console.log("Mode hors ligne détecté. Lecture du localStorage...");
+    const S_savedData = window.localStorage.getItem('S_lastTempData');
 
-      if (S_savedData !== null) {
-        const O_data = JSON.parse(S_savedData);
-        console.log("Données de secours trouvées :", O_data);
-        this.processData(O_data);
-      } else {
-        console.warn("Aucune donnée de secours disponible.");
-      }
+    if (S_savedData !== null) {
+      const O_data = JSON.parse(S_savedData);
+      console.log("Données de secours trouvées :", O_data);
+      this.processData(O_data);
+    } else {
+      console.warn("Aucune donnée de secours disponible.");
     }
   }
 
-
+  /**
+   * Utilise les données du prof quand le serveur est en panne.
+   * @return {void}
+   */
+  F_useMockData() {
+    console.log("Serveur distant HS. Utilisation des données du professeur...");
+    const O_profData = {
+      "HotHotHot": "Api v1.0",
+      "capteurs": [
+        {"type": "Thermique", "Nom": "interieur", "Valeur": "18.1", "Timestamp": 1774500791},
+        {"type": "Thermique", "Nom": "exterieur", "Valeur": "5.9", "Timestamp": 1774500791}
+      ]
+    };
+    // On sauvegarde en local puis on affiche
+    this.F_saveDataOffline(O_profData);
+    this.processData(O_profData); 
+  }
 }
 
 window.SensorManager = SensorManager;
