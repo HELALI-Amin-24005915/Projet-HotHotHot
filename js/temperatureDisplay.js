@@ -54,22 +54,22 @@ class TemperatureDisplay {
 
     // Affichage des min/max intérieur
     if (this.O_minTempInt) {
-      const minInt = this.O_eventManager.F_getMinTemperature();
-      this.O_minTempInt.textContent = minInt !== null ? minInt.toFixed(1) : "-";
+      const I_minInt = this.O_eventManager.F_getMinTemperature();
+      this.O_minTempInt.textContent = I_minInt !== null ? I_minInt.toFixed(1) : "-";
     }
     if (this.O_maxTempInt) {
-      const maxInt = this.O_eventManager.F_getMaxTemperature();
-      this.O_maxTempInt.textContent = maxInt !== null ? maxInt.toFixed(1) : "-";
+      const I_maxInt = this.O_eventManager.F_getMaxTemperature();
+      this.O_maxTempInt.textContent = I_maxInt !== null ? I_maxInt.toFixed(1) : "-";
     }
 
     // Affichage des min/max extérieur
     if (this.O_minTempExt) {
-      const minExt = this.O_eventManager.F_getMinTemperatureExt();
-      this.O_minTempExt.textContent = minExt !== null ? minExt.toFixed(1) : "-";
+      const I_minExt = this.O_eventManager.F_getMinTemperatureExt();
+      this.O_minTempExt.textContent = I_minExt !== null ? I_minExt.toFixed(1) : "-";
     }
     if (this.O_maxTempExt) {
-      const maxExt = this.O_eventManager.F_getMaxTemperatureExt();
-      this.O_maxTempExt.textContent = maxExt !== null ? maxExt.toFixed(1) : "-";
+      const I_maxExt = this.O_eventManager.F_getMaxTemperatureExt();
+      this.O_maxTempExt.textContent = I_maxExt !== null ? I_maxExt.toFixed(1) : "-";
     }
   }
 
