@@ -2,26 +2,17 @@ const S_CACHE_NAME = 'hothothot-cache-v3';
 
 // add all necessary files to urls to cache
 const A_URLS_TO_CACHE = [
-    './',
-    './index.html',
-    './styless.css',
-    './js/script.js',
-    './js/tabs.js',
-    './js/eventManager.js',
-    './js/temperatureDisplay.js',
-    './js/sensorManager.js',   
-    './js/historyManager.js', 
-    './manifest.json',
-    './favicon.ico',
-    './favicon/site.webmanifest',
-    './favicon/favicon.ico',
-    './favicon/favicon.svg',
-    './favicon/favicon-96x96.png',
-    './favicon/apple-touch-icon.png',
-    './favicon/web-app-manifest-192x192.png',
-    './favicon/web-app-manifest-512x512.png',
-    './favicon/app-icon.svg',
-    './README_NEW.md'
+        './',
+        './index.html',
+        './documentation.html',
+        './styless.css',
+        './js/script.js',
+        './js/sensorManager.js',
+        './js/temperatureDisplay.js',
+        './js/historyManager.js',
+        './js/eventManager.js',
+        './js/tabs.js',
+        './manifest.json'
 ];
 
 // open cache and add all files to it
