@@ -14,7 +14,7 @@ class NotificationManager {
 
     // Demander la permission au chargement (peut être modifié si vous préférez attendre un geste utilisateur)
     if (this.B_isSupported && Notification.permission === 'default') {
-      try { Notification.requestPermission().then(() => {}); } catch (e) { /* ignore */ }
+      try { Notification.requestPermission().then(() => {}); } catch (O_error) { console.warn('Notification permission request failed', O_error); }
     }
   }
 
@@ -71,7 +71,8 @@ class NotificationManager {
       try {
         new Notification(S_title, Object.assign({ body: S_body }, O_options));
         return;
-      } catch (e) {
+      } catch (O_error) {
+        console.warn('Notification API failed, falling back to toast', O_error);
         // fallback to toast
         this._showToast(S_title, S_body);
       }

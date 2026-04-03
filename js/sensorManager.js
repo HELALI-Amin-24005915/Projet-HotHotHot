@@ -107,8 +107,8 @@ class SensorManager {
         clearTimeout(this.O_wsTimeout);
         try {
           console.log("WebSocket closed - code:", O_event && O_event.code, "reason:", O_event && O_event.reason, "wasClean:", O_event && O_event.wasClean);
-        } catch (e) {
-          console.log('WebSocket closed');
+        } catch (O_error) {
+          console.log('WebSocket closed', O_error);
         }
         this.B_isConnected = false;
         this.handleWebSocketError();

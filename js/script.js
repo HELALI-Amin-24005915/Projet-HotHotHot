@@ -101,13 +101,13 @@ function F_registerServiceWorker() {
   try {
     const S_host = window && window.location && window.location.hostname;
     const A_prodHosts = ['hothothot.dog', 'www.hothothot.dog'];
-    const R_ipv4 = /^\d+\.\d+\.\d+\.\d+$/;
-    if (R_ipv4.test(S_host) || S_host === 'localhost' || !A_prodHosts.includes(S_host)) {
+    const O_ipv4Regex = /^\d+\.\d+\.\d+\.\d+$/;
+    if (O_ipv4Regex.test(S_host) || S_host === 'localhost' || !A_prodHosts.includes(S_host)) {
       console.log('ServiceWorker registration skipped in non-production host:', S_host);
       return;
     }
-  } catch (e) {
-    // si erreur, continuer mais tenter d'enregistrer le SW
+  } catch (O_error) {
+    console.warn('Unable to detect environment for ServiceWorker registration:', O_error);
   }
 
   if ('serviceWorker' in navigator) {
