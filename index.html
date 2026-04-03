@@ -28,6 +28,10 @@
         <h1>HotHotHot</h1>
         <h2>Accueil</h2>
         <p id="connection-mode" style="color: gray; font-size: 0.9em;">Mode: <strong>Recherche de connexion...</strong></p>
+        <div id="connection-controls" style="margin-top:6px">
+          <button id="btn-force-ws" type="button" style="font-size:0.85em;padding:6px;margin-right:8px">Forcer WebSocket</button>
+          <button id="btn-force-ajax" type="button" style="font-size:0.85em;padding:6px">Forcer AJAX</button>
+        </div>
       </header>
 
       <section id="Temperatures">
@@ -102,6 +106,7 @@
     </main>
 
     <script src="js/historyManager.js"></script>
+    <script src="js/notificationManager.js"></script>
     <script src="js/eventManager.js"></script>
     <script src="js/sensorManager.js"></script>
     <script src="js/tabs.js"></script>

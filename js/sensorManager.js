@@ -10,7 +10,7 @@ class SensorManager {
     this.O_ws = null;
     this.B_isConnected = false;
     this.I_reconnectAttempts = 0;
-    this.I_maxReconnectAttempts = 2;
+    this.I_maxReconnectAttempts = 8; // augmenter tentatives pour résilience
     this.I_reconnectDelay = 1000;
     this.S_connectionMode = "Initialisation...";
     this.B_isUsingWebSocket = false;
@@ -31,6 +31,10 @@ class SensorManager {
       return;
     }
     this.B_isSimulationStarted = true;
+    // Démarrage direct : tenter la connexion WebSocket immédiatement.
+    // Le code de gestion d'erreur et de reconnexion (handleWebSocketError/F_scheduleReconnect)
+    // s'occupera du basculement vers AJAX si le serveur n'est pas joignable.
+    console.log('SensorManager: starting simulation — attempting WebSocket connection');
     this.connectWebSocket();
   }
 
@@ -45,23 +49,31 @@ class SensorManager {
     this.B_isWebSocketFailureHandled = false;
 
     try {
+      console.log('SensorManager: attempting WebSocket connection to wss://ws.hothothot.dog:9502');
       this.O_ws = new WebSocket("wss://ws.hothothot.dog:9502");
 
-      // Timeout 3 secondes pour WebSocket
+      // Timeout augmenté à 15s pour des réseaux lents / TLS handshake
       this.O_wsTimeout = setTimeout(() => {
         if (
           this.B_isConnected === false &&
           this.O_ws &&
           this.O_ws.readyState === WebSocket.CONNECTING
         ) {
-          console.warn("WebSocket timeout");
-          this.O_ws.close();
+          console.warn("WebSocket timeout (readyState=", this.O_ws.readyState, ") - closing socket", this.O_ws.url);
+          try {
+            this.O_ws.close();
+          } catch (e) {
+            console.error('Error closing timed-out WebSocket', e);
+          }
         }
-      }, 3000);
+      }, 15000);
+
+      // NOTE: If you see frequent timeouts, increase the delay above (e.g. 8000 ms)
+      // or check network / TLS issues on the server side
 
       this.O_ws.onopen = () => {
         clearTimeout(this.O_wsTimeout);
-        console.log("WebSocket connected");
+        console.log("WebSocket connected ✓");
         this.B_isWebSocketFailureHandled = false;
         this.B_isConnected = true;
         this.B_isUsingWebSocket = true;
@@ -69,22 +81,35 @@ class SensorManager {
         this.I_reconnectAttempts = 0;
         this.S_connectionMode = "WebSocket";
         this.updateConnectionDisplay();
+        // Demande les données de température au serveur
+        this.O_ws.send("getTemperature");
+        console.log("Message 'getTemperature' sent ✓");
       };
 
       this.O_ws.onmessage = (O_event) => {
-        const O_data = JSON.parse(O_event.data);
-        this.processData(O_data);
+        console.log("📨 Message reçu du serveur:", O_event.data);
+        try {
+          const O_data = JSON.parse(O_event.data);
+          console.log("📊 Données parsées:", O_data);
+          this.processData(O_data);
+        } catch (e) {
+          console.error("❌ Erreur parsing JSON:", e, "Données brutes:", O_event.data);
+        }
       };
 
-      this.O_ws.onerror = () => {
+      this.O_ws.onerror = (O_event) => {
         clearTimeout(this.O_wsTimeout);
-        console.warn("WebSocket error");
+        console.warn("WebSocket error - readyState=", this.O_ws && this.O_ws.readyState, O_event);
         this.handleWebSocketError();
       };
 
-      this.O_ws.onclose = () => {
+      this.O_ws.onclose = (O_event) => {
         clearTimeout(this.O_wsTimeout);
-        console.log("WebSocket closed");
+        try {
+          console.log("WebSocket closed - code:", O_event && O_event.code, "reason:", O_event && O_event.reason, "wasClean:", O_event && O_event.wasClean);
+        } catch (e) {
+          console.log('WebSocket closed');
+        }
         this.B_isConnected = false;
         this.handleWebSocketError();
       };
@@ -310,3 +335,4 @@ class SensorManager {
 }
 
 window.SensorManager = SensorManager;
+
