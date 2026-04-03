@@ -187,8 +187,27 @@ td {
     transition: color 0.3s ease;
 }
 
+.git-link {
+    text-decoration: none;
+    color: #0076ff;
+    transition: color 0.3s ease;
+}
+
 .team-link:hover {
     color: #0066cc;
     text-decoration: underline;
+}
+
+@keyframes rotate-clockwise {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.team-avatar.rotating {
+    animation: rotate-clockwise 2s linear infinite;
 }
 
