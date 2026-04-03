@@ -223,13 +223,15 @@ class SensorManager {
         const S_nom = O_capteur.Nom.toLowerCase();
         const I_valeur = parseFloat(O_capteur.Valeur);
 
+        // Note: Les valeurs intérieur et extérieur sont inversées dans le serveur
+        // On les inverse ici pour corriger
         if (S_nom.includes("interieur") || S_nom.includes("int")) {
-          if (this.O_eventManager) {
-            this.O_eventManager.F_updateState(I_valeur);
-          }
-        } else if (S_nom.includes("exterieur") || S_nom.includes("ext")) {
           if (this.O_eventManager && this.O_eventManager.F_updateStateExt) {
             this.O_eventManager.F_updateStateExt(I_valeur);
+          }
+        } else if (S_nom.includes("exterieur") || S_nom.includes("ext")) {
+          if (this.O_eventManager) {
+            this.O_eventManager.F_updateState(I_valeur);
           }
         }
       }

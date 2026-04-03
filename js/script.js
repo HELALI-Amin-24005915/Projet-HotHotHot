@@ -26,27 +26,8 @@ window.HH_testNotifications = function HH_testNotifications() {
 
 // --- Controls pour forcer WS/AJAX
 window.addEventListener('load', function F_onLoad() {
-  const O_btnForceWS = document.getElementById('btn-force-ws');
-  const O_btnForceAjax = document.getElementById('btn-force-ajax');
   const O_connIndicator = document.getElementById('connection-mode');
 
-  if (O_btnForceWS) {
-    O_btnForceWS.addEventListener('click', function() {
-      console.log('Forcer WebSocket demandé');
-      // Reset flags pour tenter WS
-      O_sensorManager.B_isUsingAjax = false;
-      O_sensorManager.B_isWebSocketFailureHandled = false;
-      O_sensorManager.I_reconnectAttempts = 0;
-      O_sensorManager.connectWebSocket();
-    });
-  }
-
-  if (O_btnForceAjax) {
-    O_btnForceAjax.addEventListener('click', function() {
-      console.log('Forcer AJAX demandé');
-      O_sensorManager.F_activateAjaxFallback();
-    });
-  }
 
   // Mise à jour périodique de l'indicateur
   setInterval(() => {
