@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #1a1a1a;
+    background-color: #2d2d2d;
     color: #f0f0f0;
     margin: 0;
     padding: 2rem 1rem;
@@ -45,7 +45,7 @@ p {
 
 /* ===== Navigation Bar ===== */
 .navbar {
-    background-color: #0a0a0a;
+    background-color: #1f1f1f;
     padding: 1.5rem 1rem;
     margin: -2rem -1rem 2rem -1rem;
     border-bottom: 4px solid #ff6b35;
@@ -125,7 +125,7 @@ table {
     border: 2px solid #ff6b35;
     width: 100%;
     margin: 1rem 0;
-    background-color: #252525;
+    background-color: #3a3a3a;
 }
 
 th {
@@ -144,7 +144,7 @@ td {
 }
 
 tr:nth-child(even) {
-    background-color: #202020;
+    background-color: #323232;
 }
 
 tr:hover {
@@ -174,7 +174,7 @@ tr:hover {
     padding: 0.75rem 1.5rem;
     border: 2px solid #ff6b35;
     border-radius: 8px 8px 0 0;
-    background-color: #252525;
+    background-color: #3a3a3a;
     color: #f0f0f0;
     outline: none;
     font-weight: 600;
@@ -183,7 +183,7 @@ tr:hover {
 }
 
 [role="tab"]:hover {
-    background-color: #333333;
+    background-color: #424242;
     box-shadow: 0 0 8px rgba(255, 107, 53, 0.4);
 }
 
@@ -195,7 +195,7 @@ tr:hover {
 }
 
 [role="tab"][aria-selected="false"] {
-    background-color: #1a1a1a;
+    background-color: #2a2a2a;
     border-color: #00bcd4;
 }
 
@@ -214,7 +214,7 @@ tr:hover {
     padding: 1.5rem;
     border: 2px solid #00bcd4;
     border-radius: 0 8px 8px 8px;
-    background-color: #252525;
+    background-color: #3a3a3a;
     min-height: 200px;
     width: 100%;
     overflow: auto;
@@ -243,10 +243,9 @@ tr:hover {
     gap: 1.5rem;
     flex: 0 1 calc(33.333% - 1.33rem);
     min-width: 300px;
-    background-color: #252525;
+    background-color: #3a3a3a;
     padding: 1.5rem;
     border-radius: 8px;
-    border-left: 4px solid #ff6b35;
     transition: all 0.3s ease;
 }
 
@@ -350,6 +349,248 @@ a:hover {
     }
 }
 
+/* ===== Section and Article Styles ===== */
+section {
+    border: 2px solid #ff6b35;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    background-color: #3a3a3a;
+    box-shadow: 0 4px 8px rgba(255, 107, 53, 0.2);
+}
+
+article {
+    border: 2px solid #00bcd4;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    background-color: #3a3a3a;
+    box-shadow: 0 4px 8px rgba(0, 188, 212, 0.2);
+}
+
+/* ===== Main Container ===== */
+main > header {
+    border: 2px solid #ff6b35;
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    background-color: #3a3a3a;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+/* ===== Content Sections ===== */
+.doc-section {
+    border: 2px solid #00bcd4;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    background-color: #3a3a3a;
+    box-shadow: 0 4px 8px rgba(0, 188, 212, 0.2);
+}
+
+.doc-section h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.doc-section h4 {
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    color: #00bcd4;
+}
+
+.doc-section h5 {
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    color: #ff6b35;
+}
+
+.doc-section p {
+    margin: 0.5rem 0;
+}
+
+/* ===== Tiger Mode Theme ===== */
+body.tiger-mode {
+    background-color: #c9934a;
+    background-image:
+        repeating-linear-gradient(
+            88deg,
+            transparent 0px,
+            transparent 28px,
+            rgba(0, 0, 0, 0.4) 28px,
+            rgba(0, 0, 0, 0.4) 38px,
+            transparent 38px,
+            transparent 72px,
+            rgba(0, 0, 0, 0.32) 72px,
+            rgba(0, 0, 0, 0.32) 85px,
+            transparent 85px,
+            transparent 115px,
+            rgba(0, 0, 0, 0.38) 115px,
+            rgba(0, 0, 0, 0.38) 128px,
+            transparent 128px,
+            transparent 168px,
+            rgba(0, 0, 0, 0.35) 168px,
+            rgba(0, 0, 0, 0.35) 182px,
+            transparent 182px,
+            transparent 220px,
+            rgba(0, 0, 0, 0.33) 220px,
+            rgba(0, 0, 0, 0.33) 235px,
+            transparent 235px,
+            transparent 275px,
+            rgba(0, 0, 0, 0.37) 275px,
+            rgba(0, 0, 0, 0.37) 290px
+        );
+    color: #1a1a1a;
+    position: relative;
+}
+
+body.tiger-mode h1,
+body.tiger-mode h2,
+body.tiger-mode h3,
+body.tiger-mode h4,
+body.tiger-mode h5,
+body.tiger-mode h6 {
+    color: #ff6b35;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+body.tiger-mode p,
+body.tiger-mode a,
+body.tiger-mode td {
+    color: #1a1a1a;
+}
+
+body.tiger-mode section,
+body.tiger-mode article,
+body.tiger-mode .doc-section,
+body.tiger-mode main > header,
+body.tiger-mode table {
+    background-color: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+body.tiger-mode .team-member {
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+body.tiger-mode .navbar {
+    background-color: rgba(201, 147, 74, 0.95);
+    border-bottom-color: #2a2a2a;
+}
+
+body.tiger-mode .navbar-link:nth-child(1),
+body.tiger-mode .navbar-list li:nth-child(2) .navbar-link {
+    color: #1a1a1a;
+}
+
+body.tiger-mode [role="tab"],
+body.tiger-mode [role="tabpanel"] {
+    background-color: rgba(255, 255, 255, 0.85);
+    color: #1a1a1a;
+}
+
+body.tiger-mode [role="tab"][aria-selected="true"] {
+    background-color: #ff6b35;
+    color: #fff;
+}
+
+body.tiger-mode a {
+    color: #ff6b35;
+}
+
+body.tiger-mode a:hover {
+    color: #e55a2b;
+}
+
+body.tiger-mode tr:nth-child(even) {
+    background-color: rgba(240, 240, 240, 0.6);
+}
+
+body.tiger-mode th {
+    background-color: #ff6b35;
+    color: #fff;
+}
+
+/* ===== Theme Toggle Switch ===== */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background-color: rgba(45, 45, 45, 0.95);
+    padding: 0.75rem 1.25rem;
+    border-radius: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+body.tiger-mode .theme-toggle {
+    background-color: rgba(201, 147, 74, 0.95);
+}
+
+.theme-toggle label {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: #f0f0f0;
+}
+
+body.tiger-mode .theme-toggle label {
+    color: #1a1a1a;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #00bcd4;
+    transition: 0.4s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #ff6b35;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
 /* ===== Responsive Design ===== */
 @media (max-width: 768px) {
     h1 {
@@ -413,4 +654,3 @@ a:hover {
         padding: 0.5rem;
     }
 }
-

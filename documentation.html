@@ -1,4 +1,4 @@
-<html>
+<html lang="fr">
 <head>
     <title>Documentation - HotHotHot</title>
     <link rel="stylesheet" type="text/css" href="styless.css">
@@ -6,7 +6,16 @@
 <body>
 <audio id="audioPlayer" style="display: none;"></audio>
 
-<nav class="navbar">
+<div class="theme-toggle">
+  <label>
+    <span>Sombre</span>
+    <div class="switch">
+      <input type="checkbox" id="theme-toggle-input">
+      <span class="slider"></span>
+    </div>
+    <span>Tigre</span>
+  </label>
+</div>
     <ul class="navbar-list">
         <li><a href="index.html" class="navbar-link">Accueil</a></li>
         <li><a href="documentation.html" class="navbar-link active">Documentation</a></li>
@@ -17,27 +26,29 @@
 <h2>Documentation</h2>
 
 <h3>Membre de l'équipe : </h3>
-<h4>(appuyez sur les photos de profile et écoutez 🎵)</h4>
-<div class="team-container">
-    <div class="team-member">
-        <img src="Ressources/Amin.jpg" alt="Helali Amin" class="team-avatar" data-music="Ressources/Music/Amin Music.mp3">
-        <div class="team-info">
-            <h4><a href="https://github.com/HELALI-Amin-24005915" target="_blank" class="team-link">Helali Amin</a></h4>
-            <p>Développeur : réalisation du lot 3, mise en oeuvre d'une PWA</p>
+<div class="doc-section">
+    <h4>(appuyez sur les photos de profile et écoutez 🎵)</h4>
+    <div class="team-container">
+        <div class="team-member">
+            <img src="Ressources/Amin.jpg" alt="Helali Amin" class="team-avatar" data-music="Ressources/Music/Amin Music.mp3">
+            <div class="team-info">
+                <h4><a href="https://github.com/HELALI-Amin-24005915" target="_blank" class="team-link">Helali Amin</a></h4>
+                <p>Développeur : réalisation du lot 3, mise en oeuvre d'une PWA</p>
+            </div>
         </div>
-    </div>
-    <div class="team-member">
-        <img src="Ressources/Hamza.jpg" alt="Koliai Hamza" class="team-avatar" data-music="Ressources/Music/Hamza Music.mp3">
-        <div class="team-info">
-            <h4><a href="https://github.com/koliaih" target="_blank" class="team-link">Koliai Hamza</a></h4>
-            <p>Développeur : réalisation du lot 1, réalisation d'une interface (dont cette page)</p>
+        <div class="team-member">
+            <img src="Ressources/Hamza.jpg" alt="Koliai Hamza" class="team-avatar" data-music="Ressources/Music/Hamza Music.mp3">
+            <div class="team-info">
+                <h4><a href="https://github.com/koliaih" target="_blank" class="team-link">Koliai Hamza</a></h4>
+                <p>Développeur : réalisation du lot 1, réalisation d'une interface (dont cette page)</p>
+            </div>
         </div>
-    </div>
-    <div class="team-member">
-        <img src="Ressources/Ilann.jpg" alt="Stefanovitch Ilann" class="team-avatar" data-music="Ressources/Music/Ilann music.mp3">
-        <div class="team-info">
-            <h4><a href="https://github.com/STEFANOVITCH-Ilann-24019037" target="_blank" class="team-link">Stefanovitch Ilann</a></h4>
-            <p>Développeur : réalisation du lot 2, système d'alerte et notifications</p>
+        <div class="team-member">
+            <img src="Ressources/Ilann.jpg" alt="Stefanovitch Ilann" class="team-avatar" data-music="Ressources/Music/Ilann music.mp3">
+            <div class="team-info">
+                <h4><a href="https://github.com/STEFANOVITCH-Ilann-24019037" target="_blank" class="team-link">Stefanovitch Ilann</a></h4>
+                <p>Développeur : réalisation du lot 2, système d'alerte et notifications</p>
+            </div>
         </div>
     </div>
 </div>
@@ -93,26 +104,35 @@
 </script>
 
 <h3> Nos outils utilisé</h3>
-<h4> (on n'a pas recréé la roue)</h4>
-<p> Outil de gestionnement : Git/Discord</p>
-<h4> Lien : </h4>
-<p><a href="https://github.com/HELALI-Amin-24005915/Projet-HotHotHot" target="_blank" class="git-link">Repo GitHub</a></p>
-<p><a href="https://youtu.be/dQw4w9WgXcQ?si=HYRfmRR1ONwPkJ7L" target="_blank" class="git-link">Autre lien utile</a></p>
+<div class="doc-section">
+    <h4> (on n'a pas recréé la roue)</h4>
+    <p> Outil de gestionnement : Git/Discord</p>
+    <h4> Lien : </h4>
+    <p><a href="https://github.com/HELALI-Amin-24005915/Projet-HotHotHot" target="_blank" class="git-link">Repo GitHub</a></p>
+    <p><a href="https://youtu.be/dQw4w9WgXcQ?si=HYRfmRR1ONwPkJ7L" target="_blank" class="git-link">Autre lien utile</a></p>
+</div>
 
 
 <h5> Planique de réalisation :</h5>
-<p> Lot 1 : Du 01/04 au 67</p>
-<p> Lot 2 : Du 19/03 au 67</p>
-<p> Lot 3 : Du 19/03 au 03/04</p>
+<div class="doc-section">
+    <p> Lot 1 : Du 01/04 au 67</p>
+    <p> Lot 2 : Du 19/03 au 67</p>
+    <p> Lot 3 : Du 19/03 au 03/04</p>
+</div>
 
 <h3> Difficultés rencontraient : </h3>
-<h4> (Nous ne sommes pas parfait après tout) </h4>
-
-<p> 1) Difficulté à mettre une connection sécurisé sur l'application</p>
-<p> 2) Problème avec le Manifest JSON, le mode hors ligne n'affichait pas correctement les informations mis en cache</p>
+<div class="doc-section">
+    <h4> (Nous ne sommes pas parfait après tout) </h4>
+    <p> 1) Difficulté à mettre une connection sécurisé sur l'application</p>
+    <p> 2) Problème avec le Manifest JSON, le mode hors ligne n'affichait pas correctement les informations mis en cache</p>
+</div>
 
 <h3> Si on devrait changer des pratiques pour la prochaine fois</h3>
-<h4> ("Comme a dit un homme qui va bientôt être brisé, tu es parfait ou tu n'es pas moi" phrase de Cell parfait dans Dragon Ball Z)</h4>
-<p> 1) Améliorer la partie planification</p>
-<p> 2) Avoir plus d'imagination pour les features sérieuse/drôle (trouvez-les)</p>
+<div class="doc-section">
+    <h4> ("Comme a dit un homme qui va bientôt être brisé, tu es parfait ou tu n'es pas moi" phrase de Cell parfait dans Dragon Ball Z)</h4>
+    <p> 1) Améliorer la partie planification</p>
+    <p> 2) Avoir plus d'imagination pour les features sérieuse/drôle (trouvez-les)</p>
+</div>
+
+<script src="js/themeManager.js"></script>
 </body>

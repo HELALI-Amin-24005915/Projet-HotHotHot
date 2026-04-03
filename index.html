@@ -15,7 +15,16 @@
   </head>
   <body>
     
-    <header>
+    <div class="theme-toggle">
+      <label>
+        <span>Sombre</span>
+        <div class="switch">
+          <input type="checkbox" id="theme-toggle-input">
+          <span class="slider"></span>
+        </div>
+        <span>Tigre</span>
+      </label>
+    </div>
       <button id="btn-install" style="display: none">Installer l'application</button>
       <nav class="navbar">
           <ul class="navbar-list">
@@ -124,6 +133,7 @@
 
     <script src="js/historyManager.js"></script>
     <script src="js/notificationManager.js"></script>
+    <script src="js/themeManager.js"></script>
     <script src="js/eventManager.js"></script>
     <script src="js/sensorManager.js"></script>
     <script src="js/tabs.js"></script>
