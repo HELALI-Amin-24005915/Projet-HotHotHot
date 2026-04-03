@@ -65,7 +65,7 @@ function F_setupInstallPrompt() {
 function F_registerServiceWorker() {
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function F_loadSW() {
-      this.navigator.serviceWorker.register('/sw.js')
+      this.navigator.serviceWorker.register('./sw.js')
       .then(function F_onSuccess(O_registration) {
         console.log('Le ServiceWorker est enregistré: ', O_registration.scope);
       })
