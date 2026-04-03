@@ -4,6 +4,7 @@
     <link rel="stylesheet" type="text/css" href="styless.css">
 </head>
 <body>
+<audio id="audioPlayer" style="display: none;"></audio>
 
 <nav class="navbar">
     <ul class="navbar-list">
@@ -16,23 +17,24 @@
 <h2>Documentation</h2>
 
 <h3>Membre de l'équipe : </h3>
+<h4>(appuyez sur les photos de profile et écoutez 🎵)</h4>
 <div class="team-container">
     <div class="team-member">
-        <img src="Ressources/Amin.jpg" alt="Helali Amin" class="team-avatar">
+        <img src="Ressources/Amin.jpg" alt="Helali Amin" class="team-avatar" data-music="Ressources/Music/Amin Music.mp3">
         <div class="team-info">
             <h4><a href="https://github.com/HELALI-Amin-24005915" target="_blank" class="team-link">Helali Amin</a></h4>
             <p>Développeur : réalisation du lot 3, mise en oeuvre d'une PWA</p>
         </div>
     </div>
     <div class="team-member">
-        <img src="Ressources/Hamza.jpg" alt="Koliai Hamza" class="team-avatar">
+        <img src="Ressources/Hamza.jpg" alt="Koliai Hamza" class="team-avatar" data-music="Ressources/Music/Hamza Music.mp3">
         <div class="team-info">
             <h4><a href="https://github.com/koliaih" target="_blank" class="team-link">Koliai Hamza</a></h4>
             <p>Développeur : réalisation du lot 1, réalisation d'une interface (dont cette page)</p>
         </div>
     </div>
     <div class="team-member">
-        <img src="Ressources/Ilann.jpg" alt="Stefanovitch Ilann" class="team-avatar">
+        <img src="Ressources/Ilann.jpg" alt="Stefanovitch Ilann" class="team-avatar" data-music="Ressources/Music/Ilann music.mp3">
         <div class="team-info">
             <h4><a href="https://github.com/STEFANOVITCH-Ilann-24019037" target="_blank" class="team-link">Stefanovitch Ilann</a></h4>
             <p>Développeur : réalisation du lot 2, système d'alerte et notifications</p>
@@ -40,5 +42,71 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const avatars = document.querySelectorAll('.team-avatar');
+        const audioPlayer = document.getElementById('audioPlayer');
+        let currentRotatingAvatar = null;
+
+        avatars.forEach(avatar => {
+            avatar.style.cursor = 'pointer';
+
+            avatar.addEventListener('click', function(e) {
+                e.stopPropagation();
+
+                const musicPath = this.getAttribute('data-music');
+
+                // Si on clique sur la même photo qui tourne, arrêter tout
+                if (currentRotatingAvatar === this) {
+                    audioPlayer.pause();
+                    audioPlayer.currentTime = 0;
+                    this.classList.remove('rotating');
+                    currentRotatingAvatar = null;
+                    return;
+                }
+
+                // Arrêter la photo en train de tourner (s'il y en a une)
+                if (currentRotatingAvatar) {
+                    currentRotatingAvatar.classList.remove('rotating');
+                }
+
+                // Arrêter la musique actuelle
+                audioPlayer.pause();
+                audioPlayer.currentTime = 0;
+
+                // Charger et jouer la nouvelle musique
+                audioPlayer.src = musicPath;
+                audioPlayer.play();
+
+                // Mettre à jour la photo en train de tourner
+                currentRotatingAvatar = this;
+                this.classList.add('rotating');
+
+                // Arrêter la rotation quand la musique se termine
+                audioPlayer.onended = () => {
+                    this.classList.remove('rotating');
+                    currentRotatingAvatar = null;
+                };
+            });
+        });
+    });
+</script>
+
+<h3> Nos outils utilisé</h3>
+<h4> (on n'a pas recréé la roue)</h4>
+<p> Outil de gestionnement : Git/Discord</p>
+<p><a href="https://github.com/HELALI-Amin-24005915/Projet-HotHotHot" target="_blank" class="git-link">Lien du Repo GitHub</a></p>
+
+<h5> Planique de réalisation :</h5>
+<p> Lot 1 : Du 01/04 au 67</p>
+<p> Lot 2 : Du 19/03 au 67</p>
+<p> Lot 3 : Du 19/03 au 03/04</p>
+
+<h3> Difficultés rencontraient : </h3>
+<h4> (Nous ne sommes pas parfait après tout) </h4>
+
+<p> 1) Difficulté à mettre une connection sécurisé sur l'application</p>
+<p> 2) Problème avec le Manifest JSON, le mode hors ligne n'affichait pas correctement les informations mis en cache</p>
+
+<h3> </h3>
 </body>
-</html>
