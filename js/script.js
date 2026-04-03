@@ -8,6 +8,59 @@ const O_temperatureDisplay = new TemperatureDisplay(O_EM);
 const O_sensorManager = new SensorManager(O_EM);
 O_sensorManager.F_startSimulation();
 
+// --- Seuils d'alerte par défaut (modifiable depuis la console)
+// Intérieur: min 18°C, max 28°C
+O_EM.F_setAlertThresholds(18, 28);
+// Extérieur: min 0°C, max 35°C
+O_EM.F_setAlertThresholdsExt(0, 35);
+
+// Fonction utilitaire pour tester les notifications depuis la console :
+// appeler `HH_testNotifications()` pour simuler des franchissements de seuils
+window.HH_testNotifications = function HH_testNotifications() {
+  console.log('Simulation notifications: intérieur -> 17 puis 29 ; extérieur -> -1 puis 40');
+  O_EM.F_updateState(17);
+  setTimeout(() => O_EM.F_updateState(29), 1500);
+  setTimeout(() => O_EM.F_updateStateExt(-1), 3000);
+  setTimeout(() => O_EM.F_updateStateExt(40), 4500);
+};
+
+// --- Controls pour forcer WS/AJAX
+window.addEventListener('load', function F_onLoad() {
+  const O_btnForceWS = document.getElementById('btn-force-ws');
+  const O_btnForceAjax = document.getElementById('btn-force-ajax');
+  const O_connIndicator = document.getElementById('connection-mode');
+
+  if (O_btnForceWS) {
+    O_btnForceWS.addEventListener('click', function() {
+      console.log('Forcer WebSocket demandé');
+      // Reset flags pour tenter WS
+      O_sensorManager.B_isUsingAjax = false;
+      O_sensorManager.B_isWebSocketFailureHandled = false;
+      O_sensorManager.I_reconnectAttempts = 0;
+      O_sensorManager.connectWebSocket();
+    });
+  }
+
+  if (O_btnForceAjax) {
+    O_btnForceAjax.addEventListener('click', function() {
+      console.log('Forcer AJAX demandé');
+      O_sensorManager.F_activateAjaxFallback();
+    });
+  }
+
+  // Mise à jour périodique de l'indicateur
+  setInterval(() => {
+    if (!O_connIndicator) return;
+    if (O_sensorManager.B_isUsingWebSocket) {
+      O_connIndicator.innerHTML = 'Mode: <strong>WebSocket</strong>';
+    } else if (O_sensorManager.B_isUsingAjax) {
+      O_connIndicator.innerHTML = 'Mode: <strong>AJAX</strong>';
+    } else {
+      O_connIndicator.innerHTML = 'Mode: <strong>Recherche de connexion...</strong>';
+    }
+  }, 1000);
+});
+
 let O_deferredInstallPrompt = null;
 const O_installButton = document.getElementById('btn-install');
 
@@ -63,6 +116,19 @@ function F_setupInstallPrompt() {
 }
 
 function F_registerServiceWorker() {
+  // Ne pas enregistrer le ServiceWorker en dev (IP, localhost) pour éviter erreurs de fetch et cache stale
+  try {
+    const S_host = window && window.location && window.location.hostname;
+    const A_prodHosts = ['hothothot.dog', 'www.hothothot.dog'];
+    const R_ipv4 = /^\d+\.\d+\.\d+\.\d+$/;
+    if (R_ipv4.test(S_host) || S_host === 'localhost' || !A_prodHosts.includes(S_host)) {
+      console.log('ServiceWorker registration skipped in non-production host:', S_host);
+      return;
+    }
+  } catch (e) {
+    // si erreur, continuer mais tenter d'enregistrer le SW
+  }
+
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function F_loadSW() {
       this.navigator.serviceWorker.register('/sw.js')
